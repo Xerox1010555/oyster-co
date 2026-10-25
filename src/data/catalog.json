@@ -1,0 +1,226 @@
+{
+  "fallbackRates": {
+    "USD": 1,
+    "EGP": 48.5,
+    "AED": 3.67,
+    "SAR": 3.75
+  },
+  "dials": [
+    {
+      "key": "black",
+      "nameEn": "Onyx",
+      "nameAr": "أسود",
+      "colorHex": "#101316"
+    },
+    {
+      "key": "champagne",
+      "nameEn": "Champagne",
+      "nameAr": "شمبانيا",
+      "colorHex": "#c7ad72"
+    },
+    {
+      "key": "blue",
+      "nameEn": "Deep Blue",
+      "nameAr": "أزرق داكن",
+      "colorHex": "#173c63"
+    },
+    {
+      "key": "green",
+      "nameEn": "Emerald",
+      "nameAr": "زمردي",
+      "colorHex": "#075739"
+    },
+    {
+      "key": "white",
+      "nameEn": "Ivory",
+      "nameAr": "عاجي",
+      "colorHex": "#dedbd2"
+    },
+    {
+      "key": "grey",
+      "nameEn": "Sunburst Grey",
+      "nameAr": "رمادي مموّج",
+      "colorHex": "#777b7e"
+    }
+  ],
+  "bezels": [
+    {
+      "key": "steel",
+      "nameEn": "Steel",
+      "nameAr": "فولاذ"
+    },
+    {
+      "key": "gold",
+      "nameEn": "Gold",
+      "nameAr": "ذهب"
+    },
+    {
+      "key": "fluted",
+      "nameEn": "Fluted Gold",
+      "nameAr": "ذهب مضلّع"
+    },
+    {
+      "key": "ceramic",
+      "nameEn": "Ceramic",
+      "nameAr": "سيراميك"
+    },
+    {
+      "key": "pepsi",
+      "nameEn": "Red/Blue",
+      "nameAr": "أحمر/أزرق"
+    },
+    {
+      "key": "tachymeter",
+      "nameEn": "Tachymeter",
+      "nameAr": "تاكيميتر"
+    }
+  ],
+  "bracelets": [
+    {
+      "key": "steel",
+      "nameEn": "Steel",
+      "nameAr": "فولاذ"
+    },
+    {
+      "key": "two",
+      "nameEn": "Two-Tone",
+      "nameAr": "ثنائي اللون"
+    },
+    {
+      "key": "gold",
+      "nameEn": "Gold",
+      "nameAr": "ذهب"
+    }
+  ],
+  "premiums": {
+    "bracelet": {
+      "steel": 0,
+      "two": 260000,
+      "gold": 690000
+    },
+    "bezel": {
+      "steel": 0,
+      "gold": 50000,
+      "fluted": 90000,
+      "ceramic": 35000,
+      "pepsi": 55000,
+      "tachymeter": 45000
+    },
+    "dialNonStock": 25000
+  },
+  "products": [
+    {
+      "slug": "submariner",
+      "nameEn": "Oceanos 300",
+      "nameAr": "أوشانوس 300",
+      "refCode": "OC-3001-01",
+      "basePriceCents": 910000,
+      "caseMm": "41 mm",
+      "waterM": "300 m",
+      "calibre": "OC-3235",
+      "stockDialKey": "black",
+      "stockBezelKey": "ceramic",
+      "stockBraceletKey": "steel",
+      "modelAccent": "#c9a961",
+      "descEn": "A professional diver's instrument in 904L steel. 300 metres waterproof, ceramic bezel with a luminous 60-minute scale, and a 70-hour movement.",
+      "descAr": "أداة غوص احترافية من فولاذ 904L. مقاومة حتى 300 متر، إطار سيراميك بمقياس مضيء 60 دقيقة، وحركة احتياطها 70 ساعة."
+    },
+    {
+      "slug": "daytona",
+      "nameEn": "Velocita 4131",
+      "nameAr": "فيلوسيتا 4131",
+      "refCode": "VL-4131-01",
+      "basePriceCents": 1540000,
+      "caseMm": "40 mm",
+      "waterM": "100 m",
+      "calibre": "OC-4131",
+      "stockDialKey": "white",
+      "stockBezelKey": "tachymeter",
+      "stockBraceletKey": "steel",
+      "modelAccent": "#d9d5cb",
+      "descEn": "Born for endurance racing. A tachymeter bezel, three counters, and the column-wheel calibre OC-4131 built to time victory.",
+      "descAr": "وُلدت للسرعة والتحدي. إطار تاكيميتر، ثلاثة عدادات، وحركة بعمود تروس OC-4131 صُنعت لتقيس التتويج."
+    },
+    {
+      "slug": "datejust",
+      "nameEn": "Clairmont 41",
+      "nameAr": "كلايرمونت 41",
+      "refCode": "CM-4101-01",
+      "basePriceCents": 1210000,
+      "caseMm": "41 mm",
+      "waterM": "100 m",
+      "calibre": "OC-3235",
+      "stockDialKey": "champagne",
+      "stockBezelKey": "fluted",
+      "stockBraceletKey": "steel",
+      "modelAccent": "#d5b86b",
+      "descEn": "The archetype of the classic watch — a five-link bracelet, fluted gold bezel, and a champagne sunburst dial.",
+      "descAr": "النموذج الأول للساعة الكلاسيكية — سوار خمس الحلقات، إطار ذهبي مضلّع، وقرص شمبانيا متموّج."
+    },
+    {
+      "slug": "gmt",
+      "nameEn": "Meridian II",
+      "nameAr": "ميريديان II",
+      "refCode": "MD-2171-01",
+      "basePriceCents": 1080000,
+      "caseMm": "40 mm",
+      "waterM": "100 m",
+      "calibre": "OC-3285",
+      "stockDialKey": "black",
+      "stockBezelKey": "pepsi",
+      "stockBraceletKey": "steel",
+      "modelAccent": "#c9a961",
+      "descEn": "Two timezones, one masterpiece. A red/blue ceramic bezel tracks day and night across continents.",
+      "descAr": "منطقتان زمنيتان، وتحفة واحدة. إطار سيراميك أحمر/أزرق يتتبع الليل والنهار عبر القارات."
+    }
+  ],
+  "boutiques": [
+    {
+      "cityEn": "Geneva",
+      "cityAr": "جنيف",
+      "addressEn": "Rue du Rhône 28, 1204 Geneva",
+      "addressAr": "شارع الرون 28، 1204 جنيف",
+      "phone": "+41 22 555 01 05"
+    },
+    {
+      "cityEn": "Dubai",
+      "cityAr": "دبي",
+      "addressEn": "The Dubai Mall, Fashion Avenue",
+      "addressAr": "دبي مول، شارع الأزياء",
+      "phone": "+971 4 555 01 05"
+    },
+    {
+      "cityEn": "Cairo",
+      "cityAr": "القاهرة",
+      "addressEn": "Four Seasons Nile Plaza, Garden City",
+      "addressAr": "فور سيزونز نايل بلازا، جاردن سيتي",
+      "phone": "+20 2 2575 0001"
+    }
+  ],
+  "testimonials": [
+    {
+      "quoteEn": "The Datejust is the one object I own that makes every other thing feel temporary.",
+      "quoteAr": "«ساعة ديت جست هي الشيء الوحيد الذي أملكه ويجعل كل شيء آخر يبدو مؤقتاً.»",
+      "author": "Alexandre M.",
+      "cityEn": "Geneva",
+      "cityAr": "جنيف"
+    },
+    {
+      "quoteEn": "The care in the fitting was every bit as memorable as the watch itself.",
+      "quoteAr": "«كانت العناية في ضبط المقاس لا تقل تميزاً عن الساعة نفسها.»",
+      "author": "Nadia R.",
+      "cityEn": "Dubai",
+      "cityAr": "دبي"
+    },
+    {
+      "quoteEn": "A quiet, exacting experience from the first appointment to the final detail.",
+      "quoteAr": "«تجربة هادئة ومتقنة من الموعد الأول حتى أدق التفاصيل.»",
+      "author": "Thomas L.",
+      "cityEn": "London",
+      "cityAr": "لندن"
+    }
+  ],
+  "adminSeed": {
+    "email": "admin@oysterand.co"
+  }
+}

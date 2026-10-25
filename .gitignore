@@ -1,0 +1,19 @@
+# dependencies & builds
+node_modules/
+.next/
+
+# env
+.env
+.env.local
+.env.*.local
+
+# database (local dev)
+prisma/dev.db
+*.db
+*.db-journal
+
+# logs & misc
+*.log
+.DS_Store
+Thumbs.db
+next-env.d.ts

@@ -1,0 +1,202 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite" // dev; production: "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String          @id @default(cuid())
+  email        String          @unique
+  passwordHash String?
+  phone        String?
+  locale       String          @default("en")
+  currency     String          @default("USD")
+  // customer | concierge | admin (SQLite: no enums — validated in code)
+  role         String          @default("customer")
+  createdAt    DateTime        @default(now())
+  orders       Order[]
+  appointments Appointment[]
+  carts        Cart[]
+}
+
+model Rate {
+  id        String   @id @default(cuid())
+  code      String   @unique
+  rate      Float
+  updatedAt DateTime @updatedAt
+}
+
+model Option {
+  id      String  @id @default(cuid())
+  kind    String // dial | bezel | bracelet
+  key     String
+  nameEn  String
+  nameAr  String
+  colorHex String?
+  sort    Int     @default(0)
+
+  @@unique([kind, key])
+}
+
+model OptionPrice {
+  id     String  @id @default(cuid())
+  kind   String // dial | bezel | bracelet
+  key    String
+  cents  Int // + amount over base price, USD cents
+  // optional per-product override; null = global rule
+  productId String?
+  product   Product? @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([kind, key, productId])
+}
+
+model Product {
+  id          String  @id @default(cuid())
+  slug        String  @unique
+  family      String  @default("icon")
+  nameEn      String
+  nameAr      String
+  refCode     String
+  basePriceCents Int // USD cents
+  caseMm      String
+  waterM      String
+  calibre     String
+  descEn      String
+  descAr      String
+  stockDialKey    String
+  stockBezelKey   String
+  stockBraceletKey String
+  modelAccent  String  @default("#c9a961")
+  publishState String  @default("published") // draft | published
+  sort        Int     @default(0)
+
+  optionPrices OptionPrice[]
+  orderItems   OrderItem[]
+  cartItems    CartItem[]
+}
+
+model Cart {
+  id        String   @id @default(cuid())
+  token     String   @unique // httpOnly cookie token for guests
+  userId    String?  @unique
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  currency  String   @default("USD")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  items     CartItem[]
+}
+
+model CartItem {
+  id             String  @id @default(cuid())
+  cart           Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  cartId         String
+  product        Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId      String
+  dialKey        String
+  bezelKey       String
+  braceletKey    String
+  qty            Int
+  unitPriceCents Int     // snapshot at add time (server-computed)
+  configHash     String
+
+  @@unique([cartId, configHash])
+}
+
+model Order {
+  id          String   @id @default(cuid())
+  number      String   @unique // ORD-2026-00001
+  userId      String?
+  user        User?    @relation(fields: [userId], references: [id])
+  email       String
+  phone       String?
+  name        String?
+  city        String?
+   address    String?
+  currency    String   @default("USD")
+  rateUsed    Float    @default(1)
+  totalCents  Int
+  // draft | pending | paid | confirmed | shipped | delivered | cancelled | refunded
+  status      String   @default("pending")
+  // stripe | demo
+  provider    String   @default("demo")
+  providerSessionId String?
+  providerPaymentId String?
+  createdAt   DateTime @default(now())
+  items       OrderItem[]
+  events      OrderEvent[]
+}
+
+model OrderItem {
+  id          String  @id @default(cuid())
+  order       Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId     String
+  product     Product @relation(fields: [productId], references: [id])
+  productId   String
+  configJson  String // snapshot {dialKey,bezelKey,braceletKey,labelEn}
+  unitPriceCents Int
+  qty         Int
+}
+
+model OrderEvent {
+  id     String @id @default(cuid())
+  order  Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId String
+  from   String?
+  to     String
+  at     DateTime @default(now())
+  by     String @default("system")
+}
+
+model Appointment {
+  id         String    @id @default(cuid())
+  boutique   Boutique  @relation(fields: [boutiqueId], references: [id], onDelete: Cascade)
+  boutiqueId String
+  userId     String?
+  user       User?     @relation(fields: [userId], references: [id])
+  name       String
+  email      String
+  phone      String?
+  startsAt   DateTime
+  // consultation | fitting | servicing
+  service    String    @default("consultation")
+  // requested | confirmed | cancelled
+  status     String    @default("requested")
+  notes      String?
+  createdAt  DateTime  @default(now())
+}
+
+model Boutique {
+  id        String        @id @default(cuid())
+  cityEn    String
+  cityAr    String
+  addressEn String
+  addressAr String
+  phone     String
+  hoursEn   String        @default("Daily 10:00 — 22:00")
+  hoursAr   String        @default("يومياً 10:00 — 22:00")
+  active    Boolean       @default(true)
+  appointments Appointment[]
+}
+
+model NewsletterSubscriber {
+  id        String    @id @default(cuid())
+  email     String    @unique
+  locale    String    @default("en")
+  source    String    @default("footer")
+  confirmedAt DateTime?
+  createdAt DateTime  @default(now())
+}
+
+model Testimonial {
+  id       String  @id @default(cuid())
+  quoteEn  String
+  quoteAr  String
+  author   String
+  cityEn   String
+  cityAr   String
+  published Boolean @default(true)
+  sort      Int     @default(0)
+}

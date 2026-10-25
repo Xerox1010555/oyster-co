@@ -1,0 +1,1407 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>OYSTER &amp; CO. — Authorized Rolex Boutique</title>
+<meta name="description" content="A cinematic 3D boutique of haute horlogerie. Four icons, one craft — configure, collect and wear time, perfected.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230a0a0a'/%3E%3Cpath d='M12 46 L12 30 L22 39 L30 22 L32 27 L34 22 L42 39 L52 30 L52 46 Z' fill='none' stroke='%23c9a961' stroke-width='3' stroke-linejoin='round'/%3E%3Cline x1='12' y1='51' x2='52' y2='51' stroke='%23c9a961' stroke-width='3'/%3E%3C/svg%3E">
+<meta name="theme-color" content="#0a0a0a">
+<meta property="og:title" content="OYSTER &amp; CO. — Haute Horlogerie">
+<meta property="og:description" content="A cinematic 3D boutique of haute horlogerie — configure, collect and wear time, perfected.">
+<meta property="og:type" content="website">
+<script>
+/* Safety net: if any startup script crashes, ALWAYS reveal the page (never trap the user in the preloader). */
+window.addEventListener('error', function(){ var pre = document.getElementById('preloader'); if (pre) pre.classList.add('done'); });
+window.addEventListener('unhandledrejection', function(){ var pre = document.getElementById('preloader'); if (pre) pre.classList.add('done'); });
+</script>
+<style>
+/* ============================================================
+   DESIGN TOKENS
+============================================================ */
+:root{
+  --black:#0a0a0a; --gold:#c9a961; --gold-2:#e9d8a8; --ivory:#f5f1e8;
+  --bg:#0a0a0a; --surface:#121316; --surface-2:#181a1e; --line:rgba(201,169,97,.22);
+  --text:#f5f1e8; --muted:#9b968a; --danger:#c0392b;
+  --fh:'Cormorant Garamond',Georgia,'Times New Roman',serif;
+  --fb:'Inter',system-ui,-apple-system,sans-serif;
+  --fa:'Cairo',sans-serif;
+  --nav-h:76px; --ease:cubic-bezier(.22,1,.36,1);
+}
+html[data-theme="light"]{
+  --bg:#f5f1e8; --surface:#fffdf6; --surface-2:#f0ead9; --line:rgba(0,96,57,.28);
+  --text:#16140f; --muted:#6d675a;
+}
+/* ============================================================
+   RESET / BASE
+============================================================ */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:auto;-webkit-text-size-adjust:100%}
+body{
+  background:var(--bg); color:var(--text);
+  font-family:var(--fb); font-size:16px; line-height:1.65;
+  overflow-x:hidden; -webkit-font-smoothing:antialiased;
+}
+html[lang="ar"] body{font-family:var(--fa)}
+html[lang="ar"] h1,html[lang="ar"] h2,html[lang="ar"] h3,html[lang="ar"] .fh{font-family:var(--fa);font-weight:600}
+img,canvas,svg{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+::selection{background:var(--gold);color:#0a0a0a}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+body.has-cursor,body.has-cursor *{cursor:none!important}
+/* ============================================================
+   APP SHELL / 3D CANVAS STACKING
+============================================================ */
+#app{position:relative;will-change:transform}
+#webgl{position:fixed;inset:0;z-index:1;width:100vw;height:100vh;pointer-events:none;filter:drop-shadow(0 0 14px rgba(201,169,97,.1))}
+#webgl-fallback{position:absolute;inset:0;z-index:1;display:none;align-items:center;justify-content:center;pointer-events:none}
+body.no-webgl #webgl-fallback{display:flex}
+.section{position:relative;z-index:2}
+.wrap{max-width:1400px;margin:0 auto;padding:16vh 5vw}
+.wrap.narrow{max-width:900px;text-align:center}
+.grid-2{display:grid;grid-template-columns:1.05fr .95fr;gap:4vw;align-items:center;min-height:100vh}
+/* ============================================================
+   TYPOGRAPHY
+============================================================ */
+.kicker{font-size:11px;letter-spacing:.38em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:1.4rem}
+.section-title{font-family:var(--fh);font-weight:300;font-size:clamp(2.4rem,6vw,4.6rem);line-height:1.05;letter-spacing:.01em}
+.lead{color:var(--muted);font-size:clamp(.95rem,1.3vw,1.08rem);max-width:56ch;font-weight:300}
+.wrap.narrow .lead{margin-inline:auto}
+.line{display:block;overflow:hidden}
+/* ============================================================
+   PRELOADER
+============================================================ */
+#preloader{position:fixed;inset:0;z-index:100;background:var(--bg);display:flex;align-items:center;justify-content:center;transition:clip-path 1s var(--ease),visibility 0s 1s}
+#preloader.done{clip-path:inset(0 0 100% 0);visibility:hidden;pointer-events:none}
+.pre-inner{position:relative;width:150px;height:150px;display:flex;align-items:center;justify-content:center}
+.pre-crown{position:absolute;inset:0;margin:auto;width:96px;height:64px}
+.pre-crown path,.pre-crown line{stroke-dasharray:400;stroke-dashoffset:400;animation:crownDraw 1.6s var(--ease) .1s forwards}
+@keyframes crownDraw{to{stroke-dashoffset:0}}
+.pre-ring{position:absolute;inset:0;width:130px;height:130px;transform:rotate(-90deg)}
+.pre-ring circle{fill:none;stroke-width:1.5}
+.pre-ring .ring-bg{stroke:rgba(201,169,97,.15)}
+.pre-ring .ring-fg{stroke:var(--gold);stroke-linecap:round;stroke-dasharray:326.7;stroke-dashoffset:326.7}
+.pre-pct{position:absolute;top:56%;left:50%;transform:translateX(-50%);font-family:var(--fh);font-size:1.5rem;color:var(--text);font-weight:300}
+.pre-brand{position:absolute;bottom:-34px;left:50%;transform:translateX(-50%);font-size:10px;letter-spacing:.5em;color:var(--gold);white-space:nowrap}
+/* ============================================================
+   CUSTOM CURSOR
+============================================================ */
+#cursor{position:fixed;inset:0;z-index:9999;pointer-events:none;display:none}
+body.has-cursor #cursor{display:block}
+#cursor .c-ring{position:absolute;top:0;left:0;width:36px;height:36px;border:1px solid var(--gold);border-radius:50%;transform:translate(-50%,-50%);transition:width .3s var(--ease),height .3s var(--ease),background .3s,opacity .3s;opacity:.85}
+#cursor .c-dot{position:absolute;top:0;left:0;width:5px;height:5px;background:var(--gold);border-radius:50%;transform:translate(-50%,-50%)}
+#cursor.hover .c-ring{width:64px;height:64px;background:rgba(201,169,97,.12)}
+/* ============================================================
+   NAVIGATION
+============================================================ */
+#nav{position:fixed;top:0;left:0;right:0;z-index:60;height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;padding:0 clamp(16px,4vw,48px);transition:background .5s,backdrop-filter .5s,border-color .5s;border-bottom:1px solid transparent}
+#nav.scrolled{background:color-mix(in srgb,var(--bg) 72%,transparent);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom-color:var(--line)}
+.nav-logo{font-family:var(--fh);font-size:1.25rem;letter-spacing:.28em;font-weight:500;color:var(--text)}
+.nav-logo .logo-crown{color:var(--gold);margin-inline-end:.35em}
+.nav-logo em{color:var(--gold);font-style:normal}
+.nav-links{display:flex;gap:clamp(14px,2.4vw,34px)}
+.nav-links a{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);position:relative;padding:6px 0;transition:color .3s}
+.nav-links a::after{content:"";position:absolute;inset-inline-start:0;bottom:0;width:0;height:1px;background:var(--gold);transition:width .4s var(--ease)}
+.nav-links a:hover{color:var(--text)}
+.nav-links a:hover::after{width:100%}
+.nav-tools{display:flex;align-items:center;gap:10px}
+.tool-btn{font-size:11px;letter-spacing:.12em;padding:8px 12px;border:1px solid var(--line);border-radius:999px;color:var(--muted);transition:color .3s,border-color .3s;min-width:40px;text-align:center}
+.tool-btn:hover{color:var(--gold);border-color:var(--gold)}
+#currency{background:transparent;border:1px solid var(--line);border-radius:999px;color:var(--muted);font:inherit;font-size:11px;letter-spacing:.12em;padding:7px 10px;appearance:none}
+#currency option{background:var(--surface);color:var(--text)}
+.cart-btn{position:relative}
+#cart-count{position:absolute;top:-5px;inset-inline-end:-5px;min-width:17px;height:17px;border-radius:999px;background:var(--gold);color:#0a0a0a;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;padding:0 4px}
+#burger{display:none;flex-direction:column;gap:5px;width:40px;height:40px;align-items:center;justify-content:center;border:1px solid var(--line);border-radius:999px}
+#burger span{display:block;width:16px;height:1.5px;background:var(--text);transition:transform .4s var(--ease)}
+#nav.nav-open #burger span:first-child{transform:translateY(3.2px) rotate(45deg)}
+#nav.nav-open #burger span:last-child{transform:translateY(-3.2px) rotate(-45deg)}
+/* ============================================================
+   HERO
+============================================================ */
+#hero{position:relative;z-index:auto;min-height:100vh;min-height:100svh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:calc(var(--nav-h) + 4vh) 5vw 8vh}
+.hero-text{position:relative;z-index:0;pointer-events:none}
+.hero-kicker{font-size:11px;letter-spacing:.42em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:2.2rem}
+.hero-title{font-family:var(--fh);font-weight:300;font-size:clamp(3.4rem,13.5vw,12.5rem);line-height:.94;letter-spacing:.04em;color:var(--text)}
+html[lang="ar"] .hero-title{letter-spacing:0}
+.hero-ui{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:2rem;margin-top:3.2rem}
+.hero-sub{color:var(--muted);max-width:52ch;font-weight:300;font-size:clamp(.9rem,1.25vw,1.05rem)}
+.hero-ctas{display:flex;gap:16px;flex-wrap:wrap;justify-content:center}
+.hero-hint{display:flex;flex-direction:column;align-items:center;gap:12px;font-size:10px;letter-spacing:.4em;text-transform:uppercase;color:var(--muted);margin-top:4.5rem}
+.hint-line{width:1px;height:56px;background:linear-gradient(var(--gold),transparent);overflow:hidden;position:relative}
+.hint-line::after{content:"";position:absolute;inset:0;background:var(--ivory);animation:hintDrop 2.2s var(--ease) infinite}
+@keyframes hintDrop{0%{transform:translateY(-100%)}60%,100%{transform:translateY(100%)}}
+/* ============================================================
+   BUTTONS
+============================================================ */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:15px 34px;font-size:11px;letter-spacing:.26em;text-transform:uppercase;font-weight:600;border-radius:999px;transition:transform .35s var(--ease),box-shadow .35s,background .35s,color .35s,border-color .35s;will-change:transform}
+.btn-gold{background:var(--gold);color:#0a0a0a}
+.btn-gold:hover{background:var(--gold-2);box-shadow:0 12px 34px -10px rgba(201,169,97,.55)}
+.btn-ghost{border:1px solid var(--gold);color:var(--gold)}
+.btn-ghost:hover{background:rgba(201,169,97,.1)}
+.btn-block{width:100%}
+/* ============================================================
+   STORY — CALLOUTS
+============================================================ */
+#story{position:relative;min-height:300vh;height:300vh}
+.story-head{position:absolute;top:16vh;left:50%;transform:translateX(-50%);text-align:center;z-index:2;width:min(90vw,720px)}
+.callout{position:absolute;z-index:2;display:flex;gap:16px;align-items:flex-start;max-width:290px;opacity:0;visibility:hidden;transform:translateY(24px)}
+.callout .co-dot{flex:none;width:10px;height:10px;border-radius:50%;background:var(--gold);box-shadow:0 0 18px rgba(201,169,97,.9);margin-top:7px}
+.callout .co-line{flex:none;width:52px;height:1px;background:linear-gradient(90deg,var(--gold),transparent);margin-top:12px}
+.callout[dir="rtl"] .co-line,[dir="rtl"] .callout .co-line{background:linear-gradient(-90deg,var(--gold),transparent)}
+.callout h3{font-family:var(--fh);font-weight:500;font-size:1.35rem;letter-spacing:.04em;margin-bottom:.3rem}
+.callout p{font-size:.82rem;color:var(--muted);font-weight:300;line-height:1.6}
+#callout-1{top:28%;inset-inline-start:6vw}
+#callout-2{top:42%;inset-inline-end:6vw;flex-direction:row-reverse;text-align:right}
+#callout-3{top:56%;inset-inline-start:7vw}
+#callout-4{top:70%;inset-inline-end:7vw;flex-direction:row-reverse;text-align:right}
+#callout-5{top:84%;inset-inline-start:10vw}
+[dir="rtl"] #callout-2,[dir="rtl"] #callout-4{text-align:left}
+/* ============================================================
+   COLLECTION
+============================================================ */
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:3rem}
+.card{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px;text-align:center;transition:transform .5s var(--ease),border-color .5s,box-shadow .5s;cursor:pointer}
+.card:hover,.card.active{transform:translateY(-6px);border-color:var(--gold);box-shadow:0 24px 60px -24px rgba(201,169,97,.35)}
+.card.active::after{content:attr(data-badge);position:absolute;top:12px;inset-inline-end:12px;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:#0a0a0a;background:var(--gold);border-radius:999px;padding:4px 10px;font-weight:700}
+.card .card-dial{width:min(200px,60%);aspect-ratio:1;margin:0 auto 14px;border-radius:50%;box-shadow:0 18px 40px -14px rgba(0,0,0,.7),inset 0 0 0 1px rgba(255,255,255,.06)}
+.card h3{font-family:var(--fh);font-weight:500;font-size:1.5rem;letter-spacing:.03em}
+.card .card-ref{font-size:10px;letter-spacing:.24em;color:var(--muted);margin:.2rem 0 .8rem}
+.card .card-specs{display:flex;justify-content:center;gap:14px;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem}
+.card .card-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;border-top:1px solid var(--line);padding-top:14px}
+.card .card-price{font-family:var(--fh);font-size:1.25rem;color:var(--gold)}
+.card .card-add{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--text);border:1px solid var(--line);border-radius:999px;padding:9px 16px;transition:border-color .3s,color .3s}
+.card .card-add:hover{border-color:var(--gold);color:var(--gold)}
+.stage-col{position:relative;min-height:60vh}
+.watch-readout{position:absolute;bottom:2vh;inset-inline-start:0;max-width:340px;background:color-mix(in srgb,var(--surface) 68%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:18px;padding:22px 24px}
+.ro-model{font-family:var(--fh);font-weight:500;font-size:1.9rem;line-height:1.1}
+.ro-ref{font-size:10px;letter-spacing:.26em;color:var(--muted);margin:.25rem 0 .6rem}
+.ro-price{font-family:var(--fh);font-size:1.7rem;color:var(--gold);margin-bottom:.7rem}
+.ro-specs{list-style:none;display:flex;flex-wrap:wrap;gap:6px 18px;margin-bottom:1.1rem}
+.ro-specs li{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.ro-specs li b{color:var(--text);font-weight:500}
+/* ============================================================
+   CONFIGURATOR
+============================================================ */
+.cfg-model{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:1.8rem 0 2.2rem}
+.cfg-model button{font-size:10px;letter-spacing:.14em;text-transform:uppercase;padding:11px 4px;border:1px solid var(--line);border-radius:12px;color:var(--muted);transition:all .3s}
+.cfg-model button.active{border-color:var(--gold);color:var(--gold);background:rgba(201,169,97,.08)}
+.cfg-group{margin-bottom:1.6rem}
+.cfg-group h4{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);margin-bottom:.8rem;font-weight:500}
+.swatches{display:flex;gap:12px;flex-wrap:wrap}
+.swatch{width:38px;height:38px;border-radius:50%;border:2px solid transparent;outline:1px solid var(--line);outline-offset:3px;transition:transform .3s var(--ease),outline-color .3s,border-color .3s}
+.swatch:hover{transform:scale(1.12)}
+.swatch.active{outline-color:var(--gold);border-color:var(--gold)}
+.opts{display:flex;gap:10px;flex-wrap:wrap}
+.opt{font-size:11px;letter-spacing:.14em;padding:11px 20px;border:1px solid var(--line);border-radius:999px;color:var(--muted);transition:all .3s;text-transform:uppercase}
+.opt:hover{border-color:var(--gold);color:var(--text)}
+.opt.active{border-color:var(--gold);color:var(--gold);background:rgba(201,169,97,.1)}
+.cfg-footer{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:1.6rem;margin-top:.6rem}
+.cfg-price span{display:block;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted)}
+.cfg-price strong{font-family:var(--fh);font-weight:500;font-size:2.2rem;color:var(--gold)}
+/* ============================================================
+   CRAFT / COUNTERS
+============================================================ */
+.counters{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:4.5rem;text-align:center}
+.counter{border-top:1px solid var(--line);padding-top:1.6rem}
+.counter .num{font-family:var(--fh);font-weight:300;font-size:clamp(2.4rem,5vw,4rem);color:var(--gold);display:block;line-height:1}
+.counter .lbl{font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--muted);display:block;margin-top:.7rem}
+.craft-pars{display:grid;grid-template-columns:1fr 1fr;gap:3rem;margin-top:3.5rem;text-align:start}
+.craft-pars p{color:var(--muted);font-weight:300;font-size:.98rem}
+/* ============================================================
+   TESTIMONIALS
+============================================================ */
+.t-carousel{margin-top:3.5rem;min-height:220px;display:flex;flex-direction:column;justify-content:center;gap:2rem}
+.t-quote blockquote{font-family:var(--fh);font-weight:300;font-size:clamp(1.4rem,3.2vw,2.3rem);line-height:1.35;font-style:italic}
+.t-quote cite{display:block;margin-top:1.6rem;font-family:var(--fb);font-style:normal;font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold)}
+.t-dots{display:flex;gap:10px;justify-content:center}
+.t-dots button{width:26px;height:2px;background:var(--line);border-radius:2px;transition:background .3s,width .3s}
+.t-dots button.active{background:var(--gold);width:44px}
+/* ============================================================
+   BOUTIQUES / NEWSLETTER / FOOTER
+============================================================ */
+.boutiques{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:3rem}
+.boutique{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:30px;transition:transform .5s var(--ease),border-color .5s}
+.boutique:hover{transform:translateY(-6px);border-color:var(--gold)}
+.boutique h3{font-family:var(--fh);font-weight:500;font-size:1.7rem;margin-bottom:.4rem}
+.boutique .b-addr{color:var(--muted);font-size:.9rem;font-weight:300;min-height:3.2em}
+.boutique .b-meta{display:flex;justify-content:space-between;align-items:center;margin-top:1.4rem;padding-top:1.2rem;border-top:1px solid var(--line);font-size:11px;letter-spacing:.14em;color:var(--muted)}
+.boutique .b-meta a{color:var(--gold);letter-spacing:.2em;text-transform:uppercase;font-size:10px}
+.news-form{display:flex;gap:0;max-width:520px;margin:2.6rem auto 0;border:1px solid var(--line);border-radius:999px;padding:6px;background:color-mix(in srgb,var(--surface) 70%,transparent)}
+.news-form input{flex:1;min-width:0;background:transparent;border:0;color:var(--text);font:inherit;padding:12px 20px;outline:none}
+.news-form input::placeholder{color:var(--muted)}
+.news-form .btn{flex:none;padding:13px 28px}
+.news-ok{margin-top:1.4rem;color:var(--gold);font-size:.9rem;letter-spacing:.06em}
+footer{border-top:1px solid var(--line);margin-top:8vh}
+.foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:3rem;padding:9vh 5vw 5vh;max-width:1400px;margin:0 auto}
+.foot-brand{font-family:var(--fh);font-size:1.6rem;letter-spacing:.24em}
+.foot-brand em{color:var(--gold);font-style:normal}
+.foot-tag{color:var(--muted);font-size:.85rem;margin-top:.8rem;font-weight:300;max-width:34ch}
+.foot-rights{color:var(--muted);font-size:.72rem;margin-top:2rem;max-width:52ch;line-height:1.7}
+.foot-col h4{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:1.2rem;font-weight:500}
+.foot-col a,.foot-col span{display:block;color:var(--muted);font-size:.88rem;padding:.3rem 0;transition:color .3s;font-weight:300}
+.foot-col a:hover{color:var(--text)}
+/* ============================================================
+   CART DRAWER / MODAL / TOAST
+============================================================ */
+#cart-overlay{position:fixed;inset:0;z-index:65;background:rgba(0,0,0,.62);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);opacity:0;visibility:hidden;transition:opacity .45s,visibility 0s .45s}
+#cart-overlay.open{opacity:1;visibility:visible;transition:opacity .45s}
+#cart-drawer{position:fixed;top:0;bottom:0;inset-inline-end:0;z-index:70;width:min(430px,94vw);background:var(--surface);border-inline-start:1px solid var(--line);display:flex;flex-direction:column;transform:translateX(105%);transition:transform .6s var(--ease);visibility:hidden}
+[dir="rtl"] #cart-drawer{transform:translateX(-105%)}
+#cart-drawer.open{transform:translateX(0);visibility:visible}
+#cart-drawer header{display:flex;align-items:center;justify-content:space-between;padding:24px 26px;border-bottom:1px solid var(--line)}
+#cart-drawer header h3{font-family:var(--fh);font-weight:500;font-size:1.6rem}
+#cart-drawer .cart-note{padding:14px 26px;font-size:.75rem;color:var(--muted);border-bottom:1px solid var(--line);letter-spacing:.06em}
+#cart-items{flex:1;overflow-y:auto;padding:10px 26px}
+.cart-empty{padding:3rem 0;text-align:center;color:var(--muted);font-size:.9rem}
+.cart-item{display:grid;grid-template-columns:64px 1fr auto;gap:14px;align-items:center;padding:16px 0;border-bottom:1px solid var(--line)}
+.ci-dial{width:64px;height:64px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)}
+.ci-info strong{font-family:var(--fh);font-weight:500;font-size:1.1rem;display:block;line-height:1.2}
+.ci-info .ci-cfg{font-size:.72rem;color:var(--muted);display:block;margin:.15rem 0}
+.ci-info .ci-price{font-size:.85rem;color:var(--gold)}
+.ci-qty{display:flex;align-items:center;gap:10px;grid-column:1/-1;justify-content:flex-end}
+.ci-qty button{width:26px;height:26px;border:1px solid var(--line);border-radius:50%;font-size:14px;line-height:1;transition:border-color .3s,color .3s}
+.ci-qty button:hover{border-color:var(--gold);color:var(--gold)}
+.ci-remove{color:var(--muted);font-size:14px;padding:6px;transition:color .3s}
+.ci-remove:hover{color:var(--danger)}
+#cart-drawer footer{padding:22px 26px 28px;border-top:1px solid var(--line)}
+.cart-sub{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:1.1rem}
+.cart-sub span{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted)}
+.cart-sub strong{font-family:var(--fh);font-size:1.8rem;color:var(--gold)}
+#checkout-modal{position:fixed;inset:0;z-index:80;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.7);backdrop-filter:blur(8px)}
+#checkout-modal[hidden]{display:none}
+.modal-card{background:var(--surface);border:1px solid var(--line);border-radius:22px;width:min(480px,100%);max-height:88vh;overflow-y:auto;padding:34px;position:relative;animation:modalIn .55s var(--ease)}
+@keyframes modalIn{from{opacity:0;transform:translateY(30px) scale(.97)}to{opacity:1;transform:none}}
+.modal-card header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.6rem}
+.modal-card header h3{font-family:var(--fh);font-weight:500;font-size:1.9rem}
+#co-form{display:grid;gap:14px}
+#co-form label{display:block;font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted)}
+#co-form input{display:block;width:100%;margin-top:6px;background:var(--bg);border:1px solid var(--line);border-radius:12px;color:var(--text);font:inherit;padding:13px 16px;outline:none;transition:border-color .3s}
+#co-form input:focus{border-color:var(--gold)}
+#co-form .row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.checkout-demo{border:1px solid var(--line);padding:12px 14px;color:var(--muted);font-size:.78rem;line-height:1.5}
+#co-success{text-align:center;padding:2rem 0 1rem}
+.success-mark{width:74px;height:74px;border-radius:50%;border:1px solid var(--gold);color:var(--gold);font-size:2rem;display:flex;align-items:center;justify-content:center;margin:0 auto 1.4rem;animation:popIn .6s var(--ease)}
+@keyframes popIn{from{transform:scale(.4);opacity:0}to{transform:scale(1);opacity:1}}
+#co-success p{color:var(--muted);font-size:.9rem;margin:1rem 0 1.8rem}
+#toast{position:fixed;bottom:30px;left:50%;transform:translate(-50%,20px);z-index:90;background:var(--surface);border:1px solid var(--gold);color:var(--text);border-radius:999px;padding:13px 28px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;opacity:0;visibility:hidden;transition:all .45s var(--ease);pointer-events:none;white-space:nowrap}
+#toast.show{opacity:1;visibility:visible;transform:translate(-50%,0)}
+/* ============================================================
+   RESPONSIVE
+============================================================ */
+@media (max-width:900px){
+  .nav-links{position:fixed;top:var(--nav-h);inset-inline:0;flex-direction:column;gap:0;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(20px);border-bottom:1px solid var(--line);padding:0;opacity:0;visibility:hidden;transform:translateY(-12px);transition:all .45s var(--ease)}
+  #nav.nav-open .nav-links{opacity:1;visibility:visible;transform:none}
+  .nav-links a{padding:18px 6vw;border-bottom:1px solid var(--line);font-size:12px}
+  #burger{display:flex}
+  .grid-2{grid-template-columns:1fr;gap:0;min-height:0}
+  .stage-col{min-height:58vh;order:-1}
+  .watch-readout{position:relative;bottom:auto;inset-inline-start:auto;max-width:none;margin-top:6vh}
+  .cards{grid-template-columns:1fr}
+  .counters{grid-template-columns:1fr 1fr}
+  .craft-pars{grid-template-columns:1fr;gap:1.6rem}
+  .boutiques{grid-template-columns:1fr}
+  .foot-grid{grid-template-columns:1fr;gap:2.4rem}
+  .cfg-model{grid-template-columns:1fr 1fr}
+  .callout{max-width:230px}
+  #callout-5{display:none}
+  .wrap{padding:12vh 6vw}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
+@media (max-width:600px){
+  #nav{padding-inline:12px}
+  .nav-logo{font-size:.94rem;letter-spacing:.1em;white-space:nowrap}
+  .nav-tools{gap:4px}
+  .tool-btn{min-width:32px;padding:6px 7px;font-size:9px}
+  #currency{font-size:9px;letter-spacing:0;padding:6px 5px}
+  #theme-btn,#cart-btn,#burger{width:34px;height:34px;min-width:34px;padding:0}
+  #burger{gap:4px}
+}
+</style>
+</head>
+<body>
+
+<noscript>
+  <style>#preloader,#cursor{display:none!important}</style>
+  <p style="margin:2rem;text-align:center;font-family:Inter,sans-serif">JavaScript is required for the 3D boutique experience.</p>
+</noscript>
+
+<!-- ══════════ PRELOADER ══════════ -->
+<div id="preloader" role="status" aria-label="Loading">
+  <div class="pre-inner">
+    <svg class="pre-crown" viewBox="0 0 120 80" aria-hidden="true">
+      <path d="M10 62 L10 28 L32 46 L48 14 L60 38 L72 14 L88 46 L110 28 L110 62 Z" fill="none" stroke="#c9a961" stroke-width="2" stroke-linejoin="round"/>
+      <line x1="10" y1="68" x2="110" y2="68" stroke="#c9a961" stroke-width="2"/>
+    </svg>
+    <svg class="pre-ring" viewBox="0 0 130 130" aria-hidden="true">
+      <circle class="ring-bg" cx="65" cy="65" r="52"/>
+      <circle class="ring-fg" id="pre-ring-fg" cx="65" cy="65" r="52"/>
+    </svg>
+    <p class="pre-pct"><span id="pre-num">0</span>%</p>
+    <p class="pre-brand">OYSTER &amp; CO.</p>
+  </div>
+</div>
+
+<!-- ══════════ CUSTOM CURSOR ══════════ -->
+<div id="cursor" aria-hidden="true"><div class="c-ring"></div><div class="c-dot"></div></div>
+
+<!-- ══════════ NAVIGATION ══════════ -->
+<nav id="nav" aria-label="Main navigation">
+  <a href="#hero" class="nav-logo" data-scroll><span class="logo-crown">♛</span>OYSTER <em>&amp;</em> CO.</a>
+  <div class="nav-links" id="nav-links">
+    <a href="#collection" data-scroll data-i18n="nav.collection">Collection</a>
+    <a href="#configurator" data-scroll data-i18n="nav.configurator">Configurator</a>
+    <a href="#craft" data-scroll data-i18n="nav.craft">Craftsmanship</a>
+    <a href="#boutiques" data-scroll data-i18n="nav.boutiques">Boutiques</a>
+    <a href="#contact" data-scroll data-i18n="nav.contact">Contact</a>
+  </div>
+  <div class="nav-tools">
+    <select id="currency" aria-label="Currency">
+      <option value="USD">USD $</option>
+      <option value="EGP">EGP E£</option>
+      <option value="AED">AED</option>
+      <option value="SAR">SAR</option>
+    </select>
+    <button id="lang-btn" class="tool-btn" aria-label="Switch language">EN</button>
+    <button id="theme-btn" class="tool-btn" aria-label="Toggle theme">◐</button>
+    <button id="cart-btn" class="tool-btn cart-btn" aria-label="Open cart">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 8h12l-1.2 12H7.2L6 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+      <span id="cart-count">0</span>
+    </button>
+    <button id="burger" class="tool-btn" aria-label="Menu" aria-expanded="false"><span></span><span></span></button>
+  </div>
+</nav>
+
+<div id="app">
+  <canvas id="webgl" aria-label="Interactive 3D watch — drag to rotate" role="img"></canvas>
+
+  <!-- Static fallback if WebGL is unavailable -->
+  <div id="webgl-fallback" aria-hidden="true">
+    <svg width="300" height="380" viewBox="0 0 300 380">
+      <rect x="118" y="8" width="64" height="120" rx="14" fill="#1a1b1e" stroke="#c9a961" stroke-width="1.5"/>
+      <rect x="118" y="252" width="64" height="120" rx="14" fill="#1a1b1e" stroke="#c9a961" stroke-width="1.5"/>
+      <circle cx="150" cy="190" r="86" fill="#101114" stroke="#c9a961" stroke-width="3"/>
+      <circle cx="150" cy="190" r="72" fill="#151619"/>
+      <g stroke="#e9d8a8" stroke-width="3" stroke-linecap="round">
+        <line x1="150" y1="190" x2="150" y2="132"/>
+        <line x1="150" y1="190" x2="196" y2="208"/>
+        <line x1="150" y1="190" x2="128" y2="150" stroke="#c9a961"/>
+      </g>
+      <circle cx="150" cy="190" r="5" fill="#c9a961"/>
+    </svg>
+  </div>
+
+  <!-- ══════════ HERO ══════════ -->
+  <header id="hero" class="section">
+    <div class="hero-text">
+      <p class="hero-kicker" data-i18n="hero.kicker">Authorized Rolex Boutique · Geneva</p>
+      <h1 class="hero-title">
+        <span class="line" data-i18n="hero.title1">OYSTER</span>
+        <span class="line" data-i18n="hero.title2">PERPETUAL</span>
+      </h1>
+    </div>
+    <div class="hero-ui">
+      <p class="hero-sub" data-i18n="hero.sub">Time, perfected. Four icons of horology — forged from 904L steel, certified by the COSC, and built to outlive generations.</p>
+      <div class="hero-ctas">
+        <a href="#collection" class="btn btn-gold magnetic" data-scroll data-i18n="hero.cta1">Explore the Collection</a>
+        <a href="#configurator" class="btn btn-ghost magnetic" data-scroll data-i18n="hero.cta2">Configure Yours</a>
+      </div>
+      <div class="hero-hint"><span data-i18n="hero.scroll">Scroll to begin</span><i class="hint-line"></i></div>
+    </div>
+  </header>
+
+  <!-- ══════════ STORY / SCROLL-CHOREOGRAPHED ══════════ -->
+  <section id="story" class="section" aria-label="The craft — scroll story">
+    <div class="story-head">
+      <p class="kicker" data-i18n="story.kicker">The Craft</p>
+      <h2 class="section-title" data-i18n="story.title">Anatomy of an Icon</h2>
+    </div>
+    <div class="callout" id="callout-1"><span class="co-dot"></span><span class="co-line"></span><div><h3 data-i18n="story.c1t">904L Oystersteel</h3><p data-i18n="story.c1d">A corrosion-resistant alloy, polished to a mirror finish by master craftsmen.</p></div></div>
+    <div class="callout" id="callout-2"><span class="co-dot"></span><span class="co-line"></span><div><h3 data-i18n="story.c2t">300 Metres Waterproof</h3><p data-i18n="story.c2d">Screw-down crown and case back, tested far beyond the limits of the deep.</p></div></div>
+    <div class="callout" id="callout-3"><span class="co-dot"></span><span class="co-line"></span><div><h3 data-i18n="story.c3t">Ceramic Bezel</h3><p data-i18n="story.c3d">Virtually scratchproof, with a luminous 60-minute graduated scale.</p></div></div>
+    <div class="callout" id="callout-4"><span class="co-dot"></span><span class="co-line"></span><div><h3 data-i18n="story.c4t">Calibre 3135</h3><p data-i18n="story.c4d">Self-winding movement, 70-hour power reserve, Parachrom hairspring.</p></div></div>
+    <div class="callout" id="callout-5"><span class="co-dot"></span><span class="co-line"></span><div><h3 data-i18n="story.c5t">Superlative Chronometer</h3><p data-i18n="story.c5d">Officially certified precision of −2 / +2 seconds per day.</p></div></div>
+  </section>
+
+  <!-- ══════════ COLLECTION ══════════ -->
+  <section id="collection" class="section">
+    <div class="wrap grid-2">
+      <div class="panel-col">
+        <p class="kicker" data-i18n="collection.kicker">The Collection</p>
+        <h2 class="section-title" data-i18n="collection.title">Four Icons</h2>
+        <p class="lead" style="margin-top:1.4rem" data-i18n="collection.sub">Hover to glimpse, select to wear. Each timepiece is assembled to order and inspected by master watchmakers.</p>
+        <div class="cards" id="cards"></div>
+      </div>
+      <div class="stage-col">
+        <div class="watch-readout" id="readout">
+          <p class="ro-model" id="ro-model">Submariner Date</p>
+          <p class="ro-ref" id="ro-ref">M126610LN-0001</p>
+          <p class="ro-price" id="ro-price">$9,100</p>
+          <ul class="ro-specs" id="ro-specs"></ul>
+          <button class="btn btn-gold magnetic" id="ro-add" data-i18n="collection.add">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ CONFIGURATOR ══════════ -->
+  <section id="configurator" class="section">
+    <div class="wrap grid-2">
+      <div class="panel-col">
+        <p class="kicker" data-i18n="config.kicker">Atelier</p>
+        <h2 class="section-title" data-i18n="config.title">The Configurator</h2>
+        <p class="lead" style="margin-top:1.4rem" data-i18n="config.sub">Compose your timepiece. Dial, bezel and bracelet — rendered live in 3D, priced instantly.</p>
+        <div class="cfg-model" id="cfg-model" role="tablist" aria-label="Model"></div>
+        <div class="cfg-group"><h4 data-i18n="config.dial">Dial</h4><div class="swatches" id="cfg-dial" role="radiogroup" aria-label="Dial color"></div></div>
+        <div class="cfg-group"><h4 data-i18n="config.bezel">Bezel</h4><div class="opts" id="cfg-bezel" role="radiogroup" aria-label="Bezel"></div></div>
+        <div class="cfg-group"><h4 data-i18n="config.bracelet">Bracelet</h4><div class="opts" id="cfg-bracelet" role="radiogroup" aria-label="Bracelet material"></div></div>
+        <div class="cfg-footer">
+          <div class="cfg-price"><span data-i18n="config.price">Price</span><strong id="cfg-price">$9,100</strong></div>
+          <button class="btn btn-gold magnetic" id="cfg-add" data-i18n="config.add">Add Configuration to Cart</button>
+        </div>
+      </div>
+      <div class="stage-col"></div>
+    </div>
+  </section>
+
+  <!-- ══════════ CRAFTSMANSHIP ══════════ -->
+  <section id="craft" class="section">
+    <div class="wrap narrow">
+      <p class="kicker" data-i18n="craft.kicker">Craftsmanship</p>
+      <h2 class="section-title" data-i18n="craft.title">Obsessive by Design</h2>
+      <div class="craft-pars">
+        <p data-i18n="craft.p1">Beneath every crystal lies a universe of 3135 components — each gear cut to a micron, each jewel set by hand under a microscope in our Geneva atelier.</p>
+        <p data-i18n="craft.p2">We finish what others merely assemble: chamfered bridges, polished screws, a rotor engraved with our crest. The result is a movement that outlives its owner, and a standard that outlives trends.</p>
+      </div>
+      <div class="counters">
+        <div class="counter"><span class="num" data-count="1905">0</span><span class="lbl" data-i18n="craft.s1">Year Founded</span></div>
+        <div class="counter"><span class="num" data-count="300">0</span><span class="lbl" data-i18n="craft.s2">Metres Waterproof</span></div>
+        <div class="counter"><span class="num" data-count="70">0</span><span class="lbl" data-i18n="craft.s3">Hours Power Reserve</span></div>
+        <div class="counter"><span class="num" data-count="28800">0</span><span class="lbl" data-i18n="craft.s4">Vibrations per Hour</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ TESTIMONIALS ══════════ -->
+  <section id="testimonials" class="section">
+    <div class="wrap narrow">
+      <p class="kicker" data-i18n="testi.kicker">Voices</p>
+      <h2 class="section-title" data-i18n="testi.title">From Our Clients</h2>
+      <div class="t-carousel">
+        <div class="t-quote"><blockquote id="t-text"></blockquote><cite id="t-name"></cite></div>
+        <div class="t-dots" id="t-dots" role="tablist" aria-label="Testimonials"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ BOUTIQUES ══════════ -->
+  <section id="boutiques" class="section">
+    <div class="wrap">
+      <p class="kicker" data-i18n="bout.kicker">Visit</p>
+      <h2 class="section-title" data-i18n="bout.title">The Boutiques</h2>
+      <div class="boutiques" id="boutiques"></div>
+    </div>
+  </section>
+
+  <!-- ══════════ NEWSLETTER ══════════ -->
+  <section id="newsletter" class="section">
+    <div class="wrap narrow">
+      <p class="kicker" data-i18n="news.kicker">Private Circle</p>
+      <h2 class="section-title" data-i18n="news.title">Join the Circle</h2>
+      <p class="lead" style="margin-top:1.2rem" data-i18n="news.sub">Private previews, servicing reminders and first access to limited editions.</p>
+      <form id="news-form" class="news-form" novalidate>
+        <input type="email" id="news-email" data-i18n-ph="news.ph" placeholder="Your email address" required aria-label="Email">
+        <button type="submit" class="btn btn-gold" data-i18n="news.btn">Subscribe</button>
+      </form>
+      <p class="news-ok" id="news-ok" hidden data-i18n="news.ok">Welcome to the Circle. Check your inbox.</p>
+    </div>
+  </section>
+
+  <!-- ══════════ FOOTER ══════════ -->
+  <footer id="contact" class="section">
+    <div class="foot-grid">
+      <div>
+        <p class="foot-brand">OYSTER <em>&amp;</em> CO.</p>
+        <p class="foot-tag" data-i18n="footer.tag">Time, perfected — since 1905.</p>
+        <p class="foot-rights" data-i18n="footer.rights">© 2026 Oyster &amp; Co. An independent boutique concept. Rolex®, Oyster® and Submariner® are trademarks of Rolex SA.</p>
+      </div>
+      <div class="foot-col">
+        <h4 data-i18n="footer.explore">Explore</h4>
+        <a href="#collection" data-scroll data-i18n="nav.collection">Collection</a>
+        <a href="#configurator" data-scroll data-i18n="nav.configurator">Configurator</a>
+        <a href="#craft" data-scroll data-i18n="nav.craft">Craftsmanship</a>
+        <a href="#boutiques" data-scroll data-i18n="nav.boutiques">Boutiques</a>
+      </div>
+      <div class="foot-col">
+        <h4 data-i18n="footer.contact">Concierge</h4>
+        <span>+20 2 2575 0001</span>
+        <span>concierge@oysterand.co</span>
+        <span data-i18n="footer.hours">Open daily 10:00 — 22:00</span>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- ══════════ CART DRAWER ══════════ -->
+<div id="cart-overlay" hidden></div>
+<aside id="cart-drawer" aria-label="Shopping cart" aria-hidden="true">
+  <header>
+    <h3 data-i18n="cart.title">Your Selection</h3>
+    <button id="cart-close" class="tool-btn" aria-label="Close cart" data-i18n-aria="a11y.close">✕</button>
+  </header>
+  <p class="cart-note" data-i18n="cart.note">Complimentary engraving &amp; insured worldwide delivery.</p>
+  <div id="cart-items"></div>
+  <p class="cart-empty" id="cart-empty" data-i18n="cart.empty">Your cart is empty.</p>
+  <footer>
+    <div class="cart-sub"><span data-i18n="cart.sub">Subtotal</span><strong id="cart-total">$0</strong></div>
+    <button class="btn btn-gold btn-block" id="checkout-btn" data-i18n="cart.checkout">Proceed to Checkout</button>
+  </footer>
+</aside>
+
+<!-- ══════════ CHECKOUT MODAL ══════════ -->
+<div id="checkout-modal" hidden role="dialog" aria-modal="true" aria-label="Checkout">
+  <div class="modal-card">
+    <header>
+      <h3 data-i18n="co.title">Checkout</h3>
+      <button id="co-close" class="tool-btn" aria-label="Close" data-i18n-aria="a11y.close">✕</button>
+    </header>
+    <form id="co-form" novalidate>
+      <label><span data-i18n="co.name">Full name</span><input type="text" required autocomplete="name"></label>
+      <label><span data-i18n="co.email">Email</span><input type="email" required autocomplete="email"></label>
+      <div class="row">
+        <label><span data-i18n="co.phone">Phone</span><input type="tel" autocomplete="tel"></label>
+        <label><span data-i18n="co.city">City</span><input type="text" autocomplete="address-level2"></label>
+      </div>
+      <label><span data-i18n="co.address">Address</span><input type="text" required autocomplete="street-address"></label>
+      <p class="checkout-demo" data-i18n="co.demo">Demo checkout. No payment will be processed.</p>
+      <button type="submit" class="btn btn-gold btn-block" data-i18n="co.place">Place Order</button>
+    </form>
+    <div id="co-success" hidden>
+      <div class="success-mark">✓</div>
+      <h3 data-i18n="co.done">Order Confirmed</h3>
+      <p data-i18n="co.doneSub">A concierge will contact you within 24 hours to arrange delivery.</p>
+      <button class="btn btn-ghost" id="co-done" data-i18n="co.close">Close</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<!-- Third-party libraries are vendored locally so the site works offline / on file://.
+     If the vendor folder is missing, the rescue path in the inline script retries from the CDN. -->
+<script src="vendor/three.min.js"></script>
+<script src="vendor/gsap.min.js"></script>
+<script src="vendor/ScrollTrigger.min.js"></script>
+<script>
+'use strict';
+/* ════════════════════════════════════════════════════════════
+   SECTION 0 — CONFIG · STATE · I18N · UTILITIES
+   ════════════════════════════════════════════════════════════ */
+const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const IS_TOUCH = matchMedia('(pointer: coarse)').matches;
+
+const state = { model: 'submariner', dial: 'black', bezel: 'ceramic', bracelet: 'steel', currency: 'USD', lang: 'en', theme: 'dark' };
+
+const CURRENCIES = {
+  USD: { rate: 1,    symbol: '$' },
+  EGP: { rate: 48.5, symbol: 'E£ ' },
+  AED: { rate: 3.67, symbol: 'AED ' },
+  SAR: { rate: 3.75, symbol: 'SAR ' }
+};
+function fmt(usd) {
+  const c = CURRENCIES[state.currency] || CURRENCIES.USD;
+  return c.symbol + Math.round(usd * c.rate).toLocaleString('en-US');
+}
+
+const I18N = {
+  en: {
+    'meta.title':'OYSTER & CO. — Haute Horlogerie',
+    'nav.collection':'Collection','nav.configurator':'Configurator','nav.craft':'Craftsmanship','nav.boutiques':'Boutiques','nav.contact':'Contact','nav.cart':'Open cart','nav.theme':'Toggle theme','nav.lang':'Switch language',
+    'hero.kicker':'Authorized Rolex Boutique · Geneva','hero.title1':'OYSTER','hero.title2':'PERPETUAL',
+    'hero.sub':'Time, perfected. Four icons of horology — forged from 904L steel, certified by the COSC, and built to outlive generations.',
+    'hero.cta1':'Explore the Collection','hero.cta2':'Configure Yours','hero.scroll':'Scroll to begin',
+    'story.kicker':'The Craft','story.title':'Anatomy of an Icon',
+    'story.c1t':'904L Oystersteel','story.c1d':'A corrosion-resistant alloy, polished to a mirror finish by master craftsmen.',
+    'story.c2t':'300 Metres Waterproof','story.c2d':'Screw-down crown and case back, tested far beyond the limits of the deep.',
+    'story.c3t':'Ceramic Bezel','story.c3d':'Virtually scratchproof, with a luminous 60-minute graduated scale.',
+    'story.c4t':'Calibre 3135','story.c4d':'Self-winding movement, 70-hour power reserve, Parachrom hairspring.',
+    'story.c5t':'Superlative Chronometer','story.c5d':'Officially certified precision of −2 / +2 seconds per day.',
+    'collection.kicker':'The Collection','collection.title':'Four Icons',
+    'collection.sub':'Hover to glimpse, select to wear. Each timepiece is assembled to order and inspected by master watchmakers.',
+    'collection.case':'Case','collection.water':'Waterproof','collection.calibre':'Calibre','collection.add':'Add to Cart','collection.selected':'Selected',
+    'config.kicker':'Atelier','config.title':'The Configurator',
+    'config.sub':'Compose your timepiece. Dial, bezel and bracelet — rendered live in 3D, priced instantly.',
+    'config.dial':'Dial','config.bezel':'Bezel','config.bracelet':'Bracelet','config.price':'Price','config.add':'Add Configuration to Cart','config.model':'Model',
+    'craft.kicker':'Craftsmanship','craft.title':'Obsessive by Design',
+    'craft.p1':'Beneath every crystal lies a universe of 3135 components — each gear cut to a micron, each jewel set by hand under a microscope in our Geneva atelier.',
+    'craft.p2':'We finish what others merely assemble: chamfered bridges, polished screws, a rotor engraved with our crest. The result is a movement that outlives its owner, and a standard that outlives trends.',
+    'craft.s1':'Year Founded','craft.s2':'Metres Waterproof','craft.s3':'Hours Power Reserve','craft.s4':'Vibrations per Hour',
+    'testi.kicker':'Voices','testi.title':'From Our Clients',
+    'bout.kicker':'Visit','bout.title':'The Boutiques','bout.hours':'Open daily','bout.call':'Call',
+    'news.kicker':'Private Circle','news.title':'Join the Circle',
+    'news.sub':'Private previews, servicing reminders and first access to limited editions.',
+    'news.ph':'Your email address','news.btn':'Subscribe','news.ok':'Welcome to the Circle. Check your inbox.',
+    'cart.title':'Your Selection','cart.empty':'Your cart is empty.','cart.sub':'Subtotal','cart.checkout':'Proceed to Checkout','cart.remove':'Remove',
+    'cart.note':'Complimentary engraving & insured worldwide delivery.',
+    'co.title':'Checkout','co.name':'Full name','co.email':'Email','co.phone':'Phone','co.address':'Address','co.city':'City',
+    'co.demo':'Demo checkout. No payment will be processed.','co.place':'Place Order','co.done':'Order Confirmed',
+    'co.doneSub':'A concierge will contact you within 24 hours to arrange delivery.','co.close':'Close',
+    'footer.tag':'Time, perfected — since 1905.','footer.explore':'Explore','footer.contact':'Concierge','footer.hours':'Open daily 10:00 — 22:00',
+    'footer.rights':'© 2026 Oyster & Co. An independent boutique concept. Rolex®, Oyster® and Submariner® are trademarks of Rolex SA.',
+    'toast.add':'Added to cart','toast.model':'Model selected',
+    'dial.black':'Onyx','dial.champagne':'Champagne','dial.blue':'Deep Blue','dial.green':'Emerald','dial.white':'Ivory','dial.grey':'Sunburst Grey',
+    'bezel.steel':'Steel','bezel.gold':'Gold','bezel.fluted':'Fluted Gold','bezel.ceramic':'Ceramic','bezel.pepsi':'Pepsi','bezel.tachymeter':'Tachymeter',
+    'bracelet.steel':'Steel','bracelet.two':'Two-Tone','bracelet.gold':'Gold',
+    'a11y.close':'Close'
+  },
+  ar: {
+    'meta.title':'أويستركو — ساعات فاخرة',
+    'nav.collection':'المجموعة','nav.configurator':'المُكوِّن','nav.craft':'الحِرفة','nav.boutiques':'البوتيكات','nav.contact':'اتصل بنا','nav.cart':'فتح السلة','nav.theme':'تبديل المظهر','nav.lang':'تغيير اللغة',
+    'hero.kicker':'بوتيك رولكس المعتمد · جنيف','hero.title1':'OYSTER','hero.title2':'PERPETUAL',
+    'hero.sub':'الزمن في أتمّ صوراته. أربعة أيقونات من عالم الساعات — مصقولة من فولاذ 904L، معتمدة من COSC، وصنعت لتتجاوز الأجيال.',
+    'hero.cta1':'استكشف المجموعة','hero.cta2':'صمّم ساعتك','hero.scroll':'مرّر للبدء',
+    'story.kicker':'الحِرفة','story.title':'تشريح أيقونة',
+    'story.c1t':'فولاذ أويسترقول 904L','story.c1d':'سبيكة مقاومة للتآكل، مصقولة بلمسة مرآوية على أيدي حرفيين بارعين.',
+    'story.c2t':'محكمة ضد الماء حتى 300 متر','story.c2d':'تاج وغطاء خلفي لولبيان، اختُبرا إلى ما يتجاوز أعماق المحيط.',
+    'story.c3t':'إطار سيراميك','story.c3d':'مقاومة للخدش بشكل شبه كامل، بمقياس 60 دقيقة مضيء.',
+    'story.c4t':'كاليبر 3135','story.c4d':'حركة ذاتية التغذية، احتياطي طاقة 70 ساعة، ونابض باراشروم.',
+    'story.c5t':'كرونوميتر فائق الدقة','story.c5d':'دقة معتمدة رسمياً: −2/+2 ثانية في اليوم.',
+    'collection.kicker':'المجموعة','collection.title':'أربع أيقونات',
+    'collection.sub':'مرّر للاطلاع، واختر لتلبس. كل ساعة تُجمّع حسب الطلب ويُفتش عليها أسياد الصناعة.',
+    'collection.case':'الهيكل','collection.water':'مقاومة الماء','collection.calibre':'الحركة','collection.add':'أضف إلى السلة','collection.selected':'المحددة',
+    'config.kicker':'الأتيليه','config.title':'المُكوِّن',
+    'config.sub':'ألفّ ساعتك. القرص والإطار والسوار — تُعرض مباشرة بتقنية 3D وتُحسب قيمتها فوراً.',
+    'config.dial':'القرص','config.bezel':'الإطار','config.bracelet':'السوار','config.price':'السعر','config.add':'أضف التكوين إلى السلة','config.model':'الموديل',
+    'craft.kicker':'الحِرفة','craft.title':'هوس بالتصميم',
+    'craft.p1':'تحت كل بلورة كونٌ من 3135 مكوّناً — كل ترس مقطوع بدقة الميكرون، وكل جوهرة تُركّب يدوياً تحت المجهر في أتيليه جنيف.',
+    'craft.p2':'نُنهي ما يكتفي آخرون بتجميعه: جسور مشطوفة، وبراغي مصقولة، وروتور منقوش بشعارنا. النتيجة حركة تعيش أطول من صاحبها، ومعيار يفوق الموضات.',
+    'craft.s1':'سنة التأسيس','craft.s2':'متر مقاومة للماء','craft.s3':'ساعة احتياط طاقة','craft.s4':'اهتزازة في الساعة',
+    'testi.kicker':'أصوات','testi.title':'من عملائنا',
+    'bout.kicker':'زورونا','bout.title':'البوتيكات','bout.hours':'مفتوح يومياً','bout.call':'اتصل',
+    'news.kicker':'الدائرة الخاصة','news.title':'انضم إلى الدائرة',
+    'news.sub':'معاينات خاصة، تذكيرات صيانة، وأولوية الوصول إلى الإصدارات المحدودة.',
+    'news.ph':'بريدك الإلكتروني','news.btn':'اشترك','news.ok':'أهلاً بك في الدائرة. تفقد بريدك الوارد.',
+    'cart.title':'مختاراتك','cart.empty':'سلتك فارغة.','cart.sub':'المجموع الفرعي','cart.checkout':'إتمام الشراء','cart.remove':'إزالة',
+    'cart.note':'نقش مجاني وتوصيل مؤمن عالمياً.',
+    'co.title':'إتمام الشراء','co.name':'الاسم بالكامل','co.email':'البريد الإلكتروني','co.phone':'الهاتف','co.address':'العنوان','co.city':'المدينة',
+    'co.demo':'نموذج تجريبي. لن تتم معالجة أي دفعة.','co.place':'تأكيد الطلب','co.done':'تم تأكيد الطلب',
+    'co.doneSub':'سيتواصل معك مسؤول الخدمة خلال 24 ساعة لترتيب التوصيل.','co.close':'إغلاق',
+    'footer.tag':'الزمن في أتمّ صوراته — منذ 1905.','footer.explore':'استكشف','footer.contact':'الكونسيرج','footer.hours':'مفتوح يومياً 10:00 — 22:00',
+    'footer.rights':'© 2026 أويستركو. مفهوم بوتيك مستقل. Rolex® وOyster® وSubmariner® علامات تجارية لـ Rolex SA.',
+    'toast.add':'أُضيفت إلى السلة','toast.model':'تم اختيار الموديل',
+    'dial.black':'أسود','dial.champagne':'شمبانيا','dial.blue':'أزرق داكن','dial.green':'زمردي','dial.white':'عاجي','dial.grey':'رمادي مموّج',
+    'bezel.steel':'فولاذ','bezel.gold':'ذهب','bezel.fluted':'ذهب مضلّع','bezel.ceramic':'سيراميك','bezel.pepsi':'بيبسي','bezel.tachymeter':'تاكيميتر',
+    'bracelet.steel':'فولاذ','bracelet.two':'ثنائي اللون','bracelet.gold':'ذهب',
+    'a11y.close':'إغلاق'
+  }
+};
+function t(key) { return (I18N[state.lang] && I18N[state.lang][key]) || I18N.en[key] || key; }
+
+/* ── PREFERENCES (persisted language / theme / currency) ───────────── */
+const PREFS_KEY = 'oyster-co-prefs';
+function savePrefs() {
+  try { localStorage.setItem(PREFS_KEY, JSON.stringify({ lang: state.lang, theme: state.theme, currency: state.currency })); } catch (_) {}
+}
+function loadPrefs() {
+  try {
+    const prefs = JSON.parse(localStorage.getItem(PREFS_KEY) || 'null');
+    if (!prefs) return;
+    if (prefs.lang === 'en' || prefs.lang === 'ar') state.lang = prefs.lang;
+    if (prefs.theme === 'dark' || prefs.theme === 'light') { state.theme = prefs.theme; document.documentElement.dataset.theme = state.theme; }
+    if (CURRENCIES[prefs.currency]) { state.currency = prefs.currency; $('#currency').value = prefs.currency; }
+  } catch (_) {}
+}
+
+/* ── LIVE CURRENCY RATES (cached 4h in localStorage; static fallback) ──
+   Endpoint: open.er-api.com (free, no key). Falls back to: stale cache →
+   hardcoded constants, so prices are never broken. */
+const RATES_KEY = 'oyster-co-rates', RATES_TTL = 4 * 60 * 60 * 1000, RATES_URL = 'https://open.er-api.com/v6/latest/USD';
+function applyRates(rates) {
+  let changed = false;
+  Object.keys(CURRENCIES).forEach(code => {
+    if (code === 'USD') return;
+    const rate = Number(rates && rates[code]);
+    if (Number.isFinite(rate) && rate > 0) { CURRENCIES[code].rate = rate; changed = true; }
+  });
+  return changed;
+}
+function loadCachedRates(maxAge) {
+  try {
+    const cached = JSON.parse(localStorage.getItem(RATES_KEY) || 'null');
+    if (cached && (!maxAge || Date.now() - cached.t < maxAge)) return applyRates(cached.rates);
+  } catch (_) {}
+  return false;
+}
+async function refreshRates() {
+  const cameFromCache = loadCachedRates(RATES_TTL);
+  let fromNetwork = false;
+  if (!cameFromCache && navigator.onLine) {
+    for (let attempt = 0; attempt < 3 && !fromNetwork; attempt++) {
+      try {
+        const controller = new AbortController();
+        const killTimer = setTimeout(() => controller.abort(), 6000);
+        const res = await fetch(RATES_URL, { signal: controller.signal });
+        clearTimeout(killTimer);
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const data = await res.json();
+        if (!data || !data.rates) throw new Error('invalid payload');
+        fromNetwork = applyRates(data.rates);
+        try { localStorage.setItem(RATES_KEY, JSON.stringify({ t: Date.now(), rates: data.rates })); } catch (_) {}
+      } catch (_) { await new Promise(resolve => setTimeout(resolve, 800 * (attempt + 1))); }
+    }
+    if (!fromNetwork) loadCachedRates(Infinity); // stale cache still beats hardcoded constants
+  } else if (cameFromCache && navigator.onLine) {
+    // Fire-and-forget background refresh so the next visit uses fresh rates.
+    try { await fetch(RATES_URL).then(res => res.json()).then(data => {
+      if (data && data.rates) { localStorage.setItem(RATES_KEY, JSON.stringify({ t: Date.now(), rates: data.rates })); }
+    }).catch(() => {}); } catch (_) {}
+  }
+  if (cameFromCache || fromNetwork) { renderCatalog(); renderCart(); renderOptions(); }
+}
+
+/* DOM helpers */
+const $ = (s, ctx) => (ctx || document).querySelector(s);
+const $$ = (s, ctx) => Array.from((ctx || document).querySelectorAll(s));
+/* ════════════════════════════════════════════════════════════
+   SECTION 1 — CATALOGUE AND GENERATED UI
+   ════════════════════════════════════════════════════════════ */
+const WATCHES = {
+  submariner: { name:'Submariner Date', ref:'M126610LN-0001', price:9100, dial:'black', bezel:'ceramic', bracelet:'steel', water:'300 m', calibre:'3235', case:'41 mm', accent:'#c9a961', bezelColor:'#111315' },
+  daytona: { name:'Cosmograph Daytona', ref:'M126500LN-0001', price:15400, dial:'white', bezel:'tachymeter', bracelet:'steel', water:'100 m', calibre:'4131', case:'40 mm', accent:'#d9d5cb', bezelColor:'#17191b' },
+  datejust: { name:'Datejust 41', ref:'126334-0001', price:12100, dial:'champagne', bezel:'fluted', bracelet:'steel', water:'100 m', calibre:'3235', case:'41 mm', accent:'#d5b86b', bezelColor:'#c9a961' },
+  gmt: { name:'GMT-Master II', ref:'M126710BLRO-0001', price:10800, dial:'black', bezel:'pepsi', bracelet:'steel', water:'100 m', calibre:'3285', case:'40 mm', accent:'#c9a961', bezelColor:'#184477' }
+};
+const DIALS = [
+  { id:'black', color:'#101316' }, { id:'champagne', color:'#c7ad72' }, { id:'blue', color:'#173c63' },
+  { id:'green', color:'#075739' }, { id:'white', color:'#dedbd2' }, { id:'grey', color:'#777b7e' }
+];
+const BEZELS = ['steel','gold','fluted','ceramic','pepsi','tachymeter'];
+const BRACELETS = ['steel','two','gold'];
+let toastTimer;
+function esc(value) { return String(value).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch])); }
+function renderCatalog() {
+  const cards = $('#cards');
+  const tabs = $('#cfg-model');
+  cards.innerHTML = '';
+  tabs.innerHTML = '';
+  Object.entries(WATCHES).forEach(([id, watch]) => {
+    const dial = DIALS.find(item => item.id === watch.dial).color;
+    const card = document.createElement('article');
+    card.className = 'card' + (id === state.model ? ' active' : '');
+    card.dataset.model = id;
+    card.dataset.badge = t('collection.selected');
+    card.tabIndex = 0;
+    card.setAttribute('role','button');
+    card.setAttribute('aria-label',watch.name + ', ' + fmt(watch.price));
+    card.innerHTML = `<div class="card-dial" style="background:radial-gradient(circle at 35% 30%,${dial},#090a0b 72%);border:5px solid ${watch.bezelColor}"></div><h3>${esc(watch.name)}</h3><p class="card-ref">${esc(watch.ref)}</p><div class="card-specs"><span>${esc(watch.case)}</span><span>${esc(watch.water)}</span></div><div class="card-foot"><span class="card-price">${fmt(watch.price)}</span><button type="button" class="card-add" data-add="${id}">${t('collection.add')}</button></div>`;
+    cards.appendChild(card);
+    const tab = document.createElement('button');
+    tab.type = 'button'; tab.dataset.model = id; tab.setAttribute('role','tab');
+    tab.setAttribute('aria-selected',String(id === state.model));
+    tab.className = id === state.model ? 'active' : '';
+    tab.textContent = watch.name.replace(' Date','');
+    tabs.appendChild(tab);
+  });
+  renderOptions();
+  updateReadout();
+}
+function renderOptions() {
+  const dialRoot = $('#cfg-dial');
+  const bezelRoot = $('#cfg-bezel');
+  const braceletRoot = $('#cfg-bracelet');
+  dialRoot.innerHTML = DIALS.map(item => `<button type="button" class="swatch${item.id === state.dial ? ' active' : ''}" data-dial="${item.id}" style="background:${item.color}" aria-label="${t('dial.'+item.id)}" aria-pressed="${item.id === state.dial}"></button>`).join('');
+  bezelRoot.innerHTML = BEZELS.map(id => `<button type="button" class="opt${id === state.bezel ? ' active' : ''}" data-bezel="${id}" aria-pressed="${id === state.bezel}">${t('bezel.'+id)}</button>`).join('');
+  braceletRoot.innerHTML = BRACELETS.map(id => `<button type="button" class="opt${id === state.bracelet ? ' active' : ''}" data-bracelet="${id}" aria-pressed="${id === state.bracelet}">${t('bracelet.'+id)}</button>`).join('');
+  $('#cfg-model').querySelectorAll('[data-model]').forEach(button => {
+    const selected = button.dataset.model === state.model;
+    button.classList.toggle('active',selected); button.setAttribute('aria-selected',String(selected));
+  });
+  $('#cfg-price').textContent = fmt(configuredPrice());
+}
+function configuredPrice() {
+  const watch = WATCHES[state.model];
+  return watch.price + ({steel:0,two:2600,gold:6900}[state.bracelet] || 0) + ({steel:0,gold:500,fluted:900,ceramic:350,pepsi:550,tachymeter:450}[state.bezel] || 0) + (state.dial === watch.dial ? 0 : 250);
+}
+function updateReadout() {
+  const watch = WATCHES[state.model];
+  $('#ro-model').textContent = watch.name;
+  $('#ro-ref').textContent = watch.ref;
+  $('#ro-price').textContent = fmt(watch.price);
+  $('#ro-specs').innerHTML = `<li><b>${t('collection.case')}:</b> ${watch.case}</li><li><b>${t('collection.water')}:</b> ${watch.water}</li><li><b>${t('collection.calibre')}:</b> ${watch.calibre}</li>`;
+  $('#cards').querySelectorAll('.card').forEach(card => card.classList.toggle('active',card.dataset.model === state.model));
+  $('#cards').querySelectorAll('.card-price').forEach((node,index) => node.textContent = fmt(Object.values(WATCHES)[index].price));
+  $('#cards').querySelectorAll('.card-add').forEach(button => button.textContent = t('collection.add'));
+}
+function showToast(message) {
+  const node = $('#toast'); node.textContent = message; node.classList.add('show');
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => node.classList.remove('show'),2400);
+}
+
+/* ════════════════════════════════════════════════════════════
+   SECTION 2 — PROCEDURAL THREE.JS WATCH STUDIO
+   ════════════════════════════════════════════════════════════ */
+const canvas = $('#webgl');
+let renderer, scene, camera, watchRoot, watchParts, envTarget, storyTimeline;
+let webglReady = false;
+let threeAttempted = false;
+let renderVisible = true;
+let pointerDown = false;
+let pointerStart = { x:0, y:0, rx:0, ry:0 };
+let pointer = { x:0, y:0 };
+let scrollTarget = { x:0, y:0, scale:1 };
+let userZoom = 1;
+let touchPinchDistance = 0;
+let pinchStage = false;
+let dust;
+const clock = (typeof THREE !== 'undefined') ? new THREE.Clock() : null; /* guard: never crash when the 3D library fails to load */
+const mouse = { x:0, y:0 };
+const dialHex = Object.fromEntries(DIALS.map(item => [item.id,item.color]));
+function studioMaterial(color, roughness, metalness, extra) {
+  return new THREE.MeshPhysicalMaterial(Object.assign({ color, roughness, metalness, clearcoat:.8, clearcoatRoughness:.2, envMapIntensity:1.15 },extra || {}));
+}
+/* Color helpers — single source of truth so config changes can SWAP material
+   colors instantly instead of rebuilding the whole watch (performance fix). */
+function caseHex() { return state.bracelet === 'gold' ? '#c4a15b' : '#b9bdc1'; }
+function handHex()  { return state.bracelet === 'gold' ? '#e1c77f' : '#e6dfcb'; }
+function bezelHex(id) {
+  return id === 'pepsi' ? '#123f78'
+    : id === 'fluted' || id === 'gold' ? '#c6a252'
+    : id === 'ceramic' ? '#111315'
+    : id === 'tachymeter' ? '#17191a'
+    : '#90969a';
+}
+function braceletMatFor(parts, side) {
+  if (state.bracelet === 'gold') return parts.goldMaterial;
+  if (state.bracelet === 'two' && side) return parts.goldMaterial;
+  return parts.steelMaterial;
+}
+function disposeTree(object) {
+  object.traverse(node => {
+    if (node.geometry) node.geometry.dispose();
+    if (node.material) (Array.isArray(node.material) ? node.material : [node.material]).forEach(material => {
+      if (material.map) material.map.dispose();
+      material.dispose();
+    });
+  });
+}
+function makeTextTexture(lines, background='#101316', foreground='#eee8d6') {
+  const face = document.createElement('canvas'); face.width = 512; face.height = 512;
+  const context = face.getContext('2d');
+  const center = 256;
+  context.strokeStyle = 'rgba(255,255,255,.08)'; context.lineWidth = 2;
+  context.beginPath(); context.arc(center,center,237,0,Math.PI*2); context.stroke();
+  context.fillStyle = foreground; context.textAlign = 'center'; context.textBaseline = 'middle';
+  context.font = '600 20px Inter, Arial, sans-serif'; context.fillText(lines[0],center,168);
+  context.font = '500 12px Inter, Arial, sans-serif'; context.fillText(lines[1],center,350);
+  context.font = '500 10px Inter, Arial, sans-serif'; context.fillText(lines[2],center,371);
+  context.font = '600 13px Inter, Arial, sans-serif'; context.fillText('SWISS MADE',center,402);
+  const texture = new THREE.CanvasTexture(face); texture.colorSpace = THREE.SRGBColorSpace;
+  return texture;
+}
+function makeHand(color, length, width, type) {
+  const pivot = new THREE.Group();
+  const material = studioMaterial(color,.24,.76);
+  const shape = new THREE.Shape();
+  shape.moveTo(-width*.5,-.16); shape.lineTo(-width*.35,length*.68);
+  if (type === 'hour') {
+    shape.lineTo(-width*.7,length*.75); shape.lineTo(0,length); shape.lineTo(width*.7,length*.75);
+  } else shape.lineTo(0,length);
+  shape.lineTo(width*.35,length*.68); shape.lineTo(width*.5,-.16); shape.closePath();
+  const hand = new THREE.Mesh(new THREE.ShapeGeometry(shape),material); hand.position.z=.265;
+  pivot.add(hand);
+  if (type === 'hour') {
+    const circle = new THREE.Mesh(new THREE.TorusGeometry(width*.42,.012,6,24),material);
+    circle.position.set(0,length*.72,.268); pivot.add(circle);
+    const mercedes = new THREE.Mesh(new THREE.BoxGeometry(width*.62,.055,.012),material);
+    mercedes.position.set(0,length*.72,.27); pivot.add(mercedes);
+  }
+  return pivot;
+}
+function addBracelet(root, parts, jubilee) {
+  const group = new THREE.Group(); group.position.z=-.075; root.add(group);
+  const linkGeometry = new THREE.BoxGeometry(jubilee?.07:.105,.095,.075);
+  const centerGeometry = new THREE.BoxGeometry(jubilee?.075:.115,.105,.105);
+  const columns=jubilee?5:3;
+  const rows = 15;
+  const meshes=[];
+  for (const direction of [-1,1]) {
+    const matrices = Array.from({length:columns},() => []);
+    for (let i=0;i<rows;i++) {
+      const distance=.57+i*.095;
+      const y=direction*distance;
+      const curveZ=-Math.max(0,distance-.82)*.24;
+      for (let column=0;column<columns;column++) {
+        const x=(column-(columns-1)/2)*(jubilee?.075:.115);
+        const object=new THREE.Object3D(); object.position.set(x,y,curveZ);
+        object.rotation.x=direction*(distance>.82?.13:0); object.updateMatrix(); matrices[column].push(object.matrix.clone());
+      }
+    }
+    Array.from({length:columns},(_,index) => index).forEach(column => {
+      const center=column===Math.floor(columns/2);
+      const mesh=new THREE.InstancedMesh(center?centerGeometry:linkGeometry, braceletMatFor(parts,!center),rows);
+      mesh.userData.side=!center; meshes.push(mesh);
+      matrices[column].forEach((matrix,i) => mesh.setMatrixAt(i,matrix));
+      mesh.instanceMatrix.needsUpdate=true; group.add(mesh);
+    });
+  }
+  return { group, meshes };
+}
+function buildWatch() {
+  if (!webglReady) return;
+  if (watchRoot) { scene.remove(watchRoot); disposeTree(watchRoot); }
+  const config=WATCHES[state.model];
+  const root=new THREE.Group();
+  const parts={ root, hands:{}, dial:null, bezel:null, bracelet:null, movement:null, handMaterials:[] };
+  const caseMaterial=studioMaterial(caseHex(),.2,.92);
+  const goldMaterial=studioMaterial('#c5a35e',.19,.9);
+  const blackMaterial=studioMaterial('#101214',.27,.2);
+  const bezelMaterial=studioMaterial(bezelHex(state.bezel),.18,.88,{clearcoat:1});
+  const dialMaterial=studioMaterial(dialHex[state.dial] || dialHex[config.dial],.32,.25);
+  parts.bezelMaterial=bezelMaterial; parts.dialMaterial=dialMaterial; parts.caseMaterial=caseMaterial;
+  parts.steelMaterial=caseMaterial; parts.goldMaterial=goldMaterial;
+
+  const bracelet=addBracelet(root,parts,state.model==='datejust');
+  parts.bracelet=bracelet.group; parts.braceletMeshes=bracelet.meshes;
+  const caseGroup=new THREE.Group(); root.add(caseGroup); parts.caseGroup=caseGroup;
+  const caseProfile=[new THREE.Vector2(0,-.12),new THREE.Vector2(.69,-.12),new THREE.Vector2(.77,-.09),new THREE.Vector2(.81,-.035),new THREE.Vector2(.81,.045),new THREE.Vector2(.76,.09),new THREE.Vector2(.68,.105),new THREE.Vector2(0,.105)];
+  const caseBody=new THREE.Mesh(new THREE.LatheGeometry(caseProfile,96),caseMaterial);
+  caseBody.rotation.x=Math.PI/2; caseBody.position.z=.005; caseGroup.add(caseBody);
+  const caseBack=new THREE.Mesh(new THREE.CylinderGeometry(.72,.72,.055,80),studioMaterial('#777e83',.26,.9));
+  caseBack.rotation.x=Math.PI/2; caseBack.position.z=-.125; caseGroup.add(caseBack);
+  const sideBand=new THREE.Mesh(new THREE.TorusGeometry(.79,.055,12,96),caseMaterial); sideBand.position.z=.025; caseGroup.add(sideBand);
+  const bezel=new THREE.Mesh(new THREE.TorusGeometry(.7,.09,16,96),bezelMaterial); bezel.position.z=.14; caseGroup.add(bezel); parts.bezel=bezel;
+  const bezelFace=new THREE.Mesh(new THREE.CylinderGeometry(.72,.72,.065,96),bezelMaterial);
+  bezelFace.rotation.x=Math.PI/2; bezelFace.position.z=.12; caseGroup.add(bezelFace);
+  const minuteRing=new THREE.Mesh(new THREE.TorusGeometry(.635,.008,4,96),goldMaterial); minuteRing.position.z=.162; caseGroup.add(minuteRing);
+  /* Bezel variant groups are ALL built once, then toggled by visibility on
+     option change — enables instant bezel swaps without rebuilding the scene. */
+  const bezelMarks=new THREE.Group(); bezelMarks.position.z=.171; caseGroup.add(bezelMarks);
+  const flutes=new THREE.Group(); flutes.position.z=.171; caseGroup.add(flutes); parts.flutes=flutes;
+  for(let i=0;i<60;i++) {
+    const angle=i*Math.PI/30;
+    const flute=new THREE.Mesh(new THREE.BoxGeometry(.018,.12,.025),goldMaterial);
+    flute.position.set(Math.sin(angle)*.72,Math.cos(angle)*.72,0); flute.rotation.z=-angle; flutes.add(flute);
+    if(i%5===0) {
+      const mark=new THREE.Mesh(new THREE.BoxGeometry(.018,.055,.009),goldMaterial);
+      mark.position.set(Math.sin(angle)*.65,Math.cos(angle)*.65,0); mark.rotation.z=-angle; bezelMarks.add(mark);
+    }
+  }
+  const tachyGroup=new THREE.Group(); caseGroup.add(tachyGroup); parts.tachyGroup=tachyGroup;
+  for(let i=0;i<24;i++) {
+    const mark=new THREE.Mesh(new THREE.BoxGeometry(.014,.08,.012),goldMaterial);
+    const a=i*Math.PI/12; mark.position.set(Math.sin(a)*.72,Math.cos(a)*.72,.18); mark.rotation.z=-a; tachyGroup.add(mark);
+  }
+  const pepsiGroup=new THREE.Group(); caseGroup.add(pepsiGroup); parts.pepsiGroup=pepsiGroup;
+  const red=new THREE.Mesh(new THREE.TorusGeometry(.72,.091,12,48,Math.PI),studioMaterial('#a52632',.2,.78));
+  red.position.z=.145; red.rotation.z=Math.PI; pepsiGroup.add(red);
+  const crystal=new THREE.Mesh(new THREE.CylinderGeometry(.635,.635,.022,96),studioMaterial('#d9e4e8',.08,.05,{transparent:true,opacity:.15,transmission:.72,thickness:.08,ior:1.45,depthWrite:false}));
+  crystal.rotation.x=Math.PI/2; crystal.position.z=.185; caseGroup.add(crystal);
+
+  const dialGroup=new THREE.Group(); dialGroup.position.z=.18; root.add(dialGroup); parts.dial=dialGroup;
+  const dial=new THREE.Mesh(new THREE.CircleGeometry(.628,96),dialMaterial); dial.position.z=.008; dialGroup.add(dial);
+  const labelTexture=makeTextTexture(['OYSTER  PERPETUAL','SUPERLATIVE CHRONOMETER','OFFICIALLY CERTIFIED']);
+  const labelDisk=new THREE.Mesh(new THREE.CircleGeometry(.63,96),new THREE.MeshBasicMaterial({map:labelTexture,transparent:true,opacity:.95,depthWrite:false}));
+  labelDisk.position.z=.011; dialGroup.add(labelDisk);
+  for(let i=0;i<60;i++) {
+    const a=i*Math.PI/30, major=i%5===0;
+    const index=new THREE.Mesh(new THREE.BoxGeometry(major?.035:.012,major?.09:.035,.014),major?goldMaterial:studioMaterial('#eee8d6',.3,.65));
+    index.position.set(Math.sin(a)*.535,Math.cos(a)*.535,.021); index.rotation.z=-a; dialGroup.add(index);
+  }
+  parts.hands.hour=makeHand(handHex(),.34,.052,'hour');
+  parts.hands.minute=makeHand(handHex(),.48,.034,'minute');
+  parts.hands.second=makeHand('#bd3540',.56,.009,'second');
+  parts.handMaterials=[parts.hands.hour.children[0].material,parts.hands.minute.children[0].material];
+  dialGroup.add(parts.hands.hour,parts.hands.minute,parts.hands.second);
+  const pin=new THREE.Mesh(new THREE.SphereGeometry(.035,16,12),goldMaterial); pin.position.z=.3; dialGroup.add(pin);
+  const dateWindow=new THREE.Mesh(new THREE.PlaneGeometry(.105,.115),studioMaterial('#eee9d9',.4,.05));
+  dateWindow.position.set(.43,0,.027); dialGroup.add(dateWindow);
+  const dateCanvas=document.createElement('canvas'); dateCanvas.width=128; dateCanvas.height=128;
+  const dateContext=dateCanvas.getContext('2d'); dateContext.fillStyle='#eee9d9'; dateContext.fillRect(0,0,128,128);
+  dateContext.fillStyle='#161616'; dateContext.font='bold 74px Georgia'; dateContext.textAlign='center'; dateContext.textBaseline='middle'; dateContext.fillText(String(new Date().getDate()),64,67);
+  const dateTexture=new THREE.CanvasTexture(dateCanvas); dateTexture.colorSpace=THREE.SRGBColorSpace;
+  const dateNumber=new THREE.Mesh(new THREE.PlaneGeometry(.09,.1),new THREE.MeshBasicMaterial({map:dateTexture})); dateNumber.position.set(.43,0,.032); dialGroup.add(dateNumber);
+  const cyclops=new THREE.Mesh(new THREE.SphereGeometry(.105,24,16),studioMaterial('#eff7f8',.08,.05,{transparent:true,opacity:.34,transmission:.7,thickness:.04,depthWrite:false}));
+  cyclops.scale.set(1,1,.22); cyclops.position.set(.43,0,.07); dialGroup.add(cyclops);
+  if(state.model==='daytona') {
+    [[-.28,-.18],[.28,-.18],[0,.31]].forEach(([x,y],index) => {
+      const sub=new THREE.Mesh(new THREE.CircleGeometry(.105,32),studioMaterial('#252729',.4,.35));
+      sub.position.set(x,y,.024); dialGroup.add(sub);
+      const rim=new THREE.Mesh(new THREE.TorusGeometry(.106,.009,5,32),goldMaterial); rim.position.set(x,y,.027); dialGroup.add(rim);
+      for(let i=0;i<12;i++) { const a=i*Math.PI/6; const tick=new THREE.Mesh(new THREE.BoxGeometry(.006,.018,.004),studioMaterial('#eee8d6',.3,.5)); tick.position.set(x+Math.sin(a)*.082,y+Math.cos(a)*.082,.03); tick.rotation.z=-a; dialGroup.add(tick); }
+      const hand=new THREE.Mesh(new THREE.BoxGeometry(.006,.06,.006),goldMaterial); hand.position.set(x,y+.025,.034); hand.rotation.z=index*.5; dialGroup.add(hand);
+    });
+  }
+  const movement=new THREE.Group(); movement.position.z=-.17; root.add(movement); parts.movement=movement;
+  const movementFace=new THREE.Mesh(new THREE.CylinderGeometry(.45,.45,.025,64),studioMaterial('#252722',.3,.78)); movementFace.rotation.x=Math.PI/2; movement.add(movementFace);
+  for(let i=0;i<5;i++) {
+    const gear=new THREE.Mesh(new THREE.TorusGeometry(.12+i*.045,.009,6,40),goldMaterial);
+    gear.position.set(Math.cos(i*1.2)*.19,Math.sin(i*1.2)*.19,.03); movement.add(gear);
+    const axle=new THREE.Mesh(new THREE.CylinderGeometry(.018,.018,.03,12),caseMaterial); axle.position.copy(gear.position); axle.rotation.x=Math.PI/2; movement.add(axle);
+  }
+  const crown=new THREE.Mesh(new THREE.CylinderGeometry(.105,.105,.18,32),caseMaterial); crown.rotation.z=Math.PI/2; crown.position.set(.88,0,.015); caseGroup.add(crown);
+  for(let i=0;i<7;i++) { const groove=new THREE.Mesh(new THREE.TorusGeometry(.105,.009,5,32),goldMaterial); groove.rotation.y=Math.PI/2; groove.position.set(.83+i*.025,0,.015); caseGroup.add(groove); }
+  [-1,1].forEach(side => { const guard=new THREE.Mesh(new THREE.BoxGeometry(.15,.16,.1),caseMaterial); guard.position.set(.78,side*.16,.025); caseGroup.add(guard); });
+  watchRoot=root; watchParts=parts; scene.add(root);
+  root.traverse(node => { if(node.isMesh || node.isInstancedMesh){node.castShadow=true;node.receiveShadow=true;} });
+  root.rotation.set(-.16,.18,.08);
+  if(!REDUCED && window.gsap) gsap.to(root.rotation,{z:0,duration:.75,ease:'power3.out'});
+  updateTimeHands();
+  if(storyTimeline) createStoryTimeline();
+}
+function initThree() {
+  threeAttempted = true;
+  if (!window.THREE || !canvas.getContext('webgl2') && !canvas.getContext('webgl')) { document.body.classList.add('no-webgl'); return; }
+  try {
+    renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:!IS_TOUCH,powerPreference:'high-performance'});
+    renderer.setPixelRatio(Math.min(devicePixelRatio || 1,2)); renderer.setSize(innerWidth,innerHeight,false);
+    renderer.outputColorSpace=THREE.SRGBColorSpace; renderer.toneMapping=THREE.ACESFilmicToneMapping; renderer.toneMappingExposure=1.18;
+    renderer.shadowMap.enabled=!IS_TOUCH; renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+    scene=new THREE.Scene();
+    camera=new THREE.PerspectiveCamera(34,innerWidth/innerHeight,.1,80); camera.position.set(0,0,6.8);
+    const envCanvas=document.createElement('canvas'); envCanvas.width=512; envCanvas.height=256;
+    const envContext=envCanvas.getContext('2d');
+    const envGradient=envContext.createLinearGradient(0,0,0,256); envGradient.addColorStop(0,'#9ca4aa'); envGradient.addColorStop(.45,'#252a2d'); envGradient.addColorStop(1,'#050607');
+    envContext.fillStyle=envGradient; envContext.fillRect(0,0,512,256);
+    [[45,35,85,35],[190,0,230,90],[390,20,470,62]].forEach(([x,y,w,h]) => { envContext.fillStyle='rgba(245,241,232,.55)'; envContext.fillRect(x,y,w,h); });
+    const envTexture=new THREE.CanvasTexture(envCanvas); envTexture.mapping=THREE.EquirectangularReflectionMapping;
+    const pmrem=new THREE.PMREMGenerator(renderer); envTarget=pmrem.fromEquirectangular(envTexture);
+    scene.environment=envTarget.texture; envTexture.dispose(); pmrem.dispose();
+    const key=new THREE.DirectionalLight('#fff1d2',3.1); key.position.set(-3,4,6); key.castShadow=true; scene.add(key);
+    const fill=new THREE.DirectionalLight('#c7d9e8',2.2); fill.position.set(4,1,4); scene.add(fill);
+    const rim=new THREE.DirectionalLight('#c9a961',3.4); rim.position.set(1,4,-3); scene.add(rim);
+    scene.add(new THREE.AmbientLight('#d5d8dc',.55));
+    const dustGeometry=new THREE.BufferGeometry(); const points=[];
+    for(let i=0;i<(IS_TOUCH?260:650);i++) points.push((Math.random()-.5)*9,(Math.random()-.5)*7,(Math.random()-.5)*4);
+    dustGeometry.setAttribute('position',new THREE.Float32BufferAttribute(points,3));
+    dust=new THREE.Points(dustGeometry,new THREE.PointsMaterial({color:'#c9a961',size:.012,transparent:true,opacity:.48,depthWrite:false})); scene.add(dust);
+    webglReady=true; buildWatch();
+    const observed=new Map();
+    const observer=new IntersectionObserver(entries => {
+      entries.forEach(entry => observed.set(entry.target,entry.isIntersecting));
+      renderVisible=Array.from(observed.values()).some(Boolean);
+    },{threshold:0});
+    ['hero','story','collection','configurator'].forEach(id => observer.observe(document.getElementById(id)));
+    window.addEventListener('resize',resizeThree,{passive:true});
+    document.addEventListener('visibilitychange',() => { /* respect BOTH the tab state and the section observer (fixes v1 override conflict) */
+      renderVisible=!document.hidden && Array.from(observed.values()).some(Boolean); });
+    requestAnimationFrame(renderThree);
+  } catch(error) {
+    document.body.classList.add('no-webgl');
+    console.warn('3D renderer unavailable; showing static watch fallback.',error);
+  }
+}
+function resizeThree() {
+  if (!renderer || !camera) return;
+  camera.aspect=innerWidth/innerHeight; camera.fov=innerWidth<700?39:34; camera.updateProjectionMatrix();
+  renderer.setPixelRatio(Math.min(devicePixelRatio || 1,2)); renderer.setSize(innerWidth,innerHeight,false);
+}
+function updateTimeHands() {
+  if (!watchParts) return;
+  const now=new Date();
+  const seconds=now.getSeconds()+now.getMilliseconds()/1000;
+  const minutes=now.getMinutes()+seconds/60;
+  const hours=(now.getHours()%12)+minutes/60;
+  watchParts.hands.second.rotation.z=-seconds*Math.PI/30;
+  watchParts.hands.minute.rotation.z=-minutes*Math.PI/30;
+  watchParts.hands.hour.rotation.z=-hours*Math.PI/6;
+}
+function updateStageTarget() {
+  const sections=['hero','story','collection','configurator'].map(id => document.getElementById(id));
+  const center=innerHeight*.5;
+  let nearest=sections[0], distance=Infinity;
+  sections.forEach(section => { const rect=section.getBoundingClientRect(); const d=Math.abs((rect.top+Math.min(rect.height,innerHeight))/2-center); if(d<distance){distance=d;nearest=section;} });
+  const story=document.getElementById('story');
+  const storyRange=Math.max(1,story.offsetHeight-innerHeight);
+  const storyProgress=Math.max(0,Math.min(1,-story.getBoundingClientRect().top/storyRange));
+  const isStory=nearest && nearest.id==='story';
+  const isSide=nearest && (nearest.id==='collection'||nearest.id==='configurator');
+  scrollTarget.x=innerWidth<900?0:(isSide?1.35:0);
+  scrollTarget.y=innerWidth<900?.38:0;
+  scrollTarget.scale=(innerWidth<900?.62:1)*userZoom;
+  scrollTarget.cameraX=isStory?Math.sin(storyProgress*Math.PI*2)*.55:0;
+  scrollTarget.cameraZ=6.8-(isStory?Math.sin(storyProgress*Math.PI)*.6:0);
+}
+function renderThree() {
+  requestAnimationFrame(renderThree);
+  if (!clock || !webglReady || !renderVisible || document.hidden) return;
+  const elapsed=clock.getElapsedTime();
+  updateTimeHands();
+  updateStageTarget();
+  if(watchRoot) {
+    watchRoot.position.x+=(scrollTarget.x-watchRoot.position.x)*.055;
+    watchRoot.position.y+=(scrollTarget.y-watchRoot.position.y)*.055;
+    const targetScale=scrollTarget.scale*(pointerDown?1.02:1);
+    const scale=watchRoot.scale.x+(targetScale-watchRoot.scale.x)*.06; watchRoot.scale.setScalar(scale);
+    watchRoot.rotation.y+=(mouse.x*.14+.12+Math.sin(elapsed*.32)*.08-watchRoot.rotation.y)*.025;
+    watchRoot.rotation.x+=(-.14+mouse.y*.08-watchRoot.rotation.x)*.025;
+  }
+  camera.position.x+=(scrollTarget.cameraX-camera.position.x)*.035;
+  camera.position.z+=(scrollTarget.cameraZ-camera.position.z)*.035;
+  camera.lookAt(watchRoot?watchRoot.position.x*.32:0,watchRoot?watchRoot.position.y*.25:0,0);
+  if(dust) { dust.rotation.y=elapsed*.018; dust.rotation.x=Math.sin(elapsed*.1)*.025; }
+  renderer.render(scene,camera);
+}
+function chooseModel(id) {
+  if (!WATCHES[id]) return;
+  state.model=id;
+  const watch=WATCHES[id]; state.dial=watch.dial; state.bezel=watch.bezel; state.bracelet=watch.bracelet;
+  renderCatalog(); buildWatch(); showToast(t('toast.model'));
+}
+
+/* ── INSTANT CONFIG SWAPS — no scene rebuild needed ─────────────────── */
+function applyConfig(kind) {
+  if (!watchParts || !watchParts.dialMaterial) { buildWatch(); return; }
+  if (kind === 'dial') watchParts.dialMaterial.color.set(dialHex[state.dial]);
+  if (kind === 'bezel') {
+    watchParts.bezelMaterial.color.set(bezelHex(state.bezel));
+    watchParts.flutes.visible = state.bezel === 'fluted';
+    watchParts.tachyGroup.visible = state.bezel === 'tachymeter';
+    watchParts.pepsiGroup.visible = state.bezel === 'pepsi';
+  }
+  if (kind === 'bracelet') {
+    watchParts.braceletMeshes.forEach(mesh => { mesh.material = braceletMatFor(watchParts, !!mesh.userData.side); });
+    watchParts.caseMaterial.color.set(caseHex());
+    watchParts.handMaterials.forEach(mat => mat.color.set(handHex()));
+  }
+}
+
+/* ════════════════════════════════════════════════════════════
+   SECTION 3 — CART, CHECKOUT AND PERSISTENT STATE
+   ════════════════════════════════════════════════════════════ */
+let cart=[];
+function saveCart() { try { localStorage.setItem('oyster-co-cart',JSON.stringify(cart)); } catch (_) {} }
+function loadCart() {
+  try { const parsed=JSON.parse(localStorage.getItem('oyster-co-cart') || '[]'); if(Array.isArray(parsed)) cart=parsed.filter(item => WATCHES[item.model] && Number.isFinite(item.price) && Number.isInteger(item.qty) && item.qty>0); } catch (_) { cart=[]; }
+}
+function addToCart(model, price, configuration) {
+  const key=model+'|'+configuration;
+  const existing=cart.find(item => item.key===key);
+  if(existing) existing.qty++;
+  else cart.push({key,model,price,configuration,qty:1});
+  saveCart(); renderCart(); showToast(t('toast.add'));
+}
+function renderCart() {
+  const root=$('#cart-items'); const empty=cart.length===0;
+  $('#cart-empty').hidden=!empty;
+  root.innerHTML=cart.map(item => {
+    const watch=WATCHES[item.model];
+    const match=item.configuration.match(/Dial: ([a-z]+)/);
+    const dial=dialHex[match ? match[1] : WATCHES[item.model].dial] || '#101316';
+    return `<article class="cart-item"><div class="ci-dial" style="background:radial-gradient(circle at 35% 30%,${dial},#08090a 72%);border:3px solid ${watch.bezelColor}"></div><div class="ci-info"><strong>${esc(watch.name)}</strong><span class="ci-cfg">${esc(item.configuration)}</span><span class="ci-price">${fmt(item.price)}</span></div><button class="ci-remove" data-remove="${esc(item.key)}" aria-label="${t('cart.remove')} ${esc(watch.name)}">×</button><div class="ci-qty"><button data-qty="-1" data-key="${esc(item.key)}" aria-label="Decrease quantity">−</button><span>${item.qty}</span><button data-qty="1" data-key="${esc(item.key)}" aria-label="Increase quantity">+</button></div></article>`;
+  }).join('');
+  const count=cart.reduce((sum,item)=>sum+item.qty,0);
+  $('#cart-count').textContent=count;
+  $('#cart-total').textContent=fmt(cart.reduce((sum,item)=>sum+item.price*item.qty,0));
+  $('#checkout-btn').disabled=empty;
+}
+function openCart() {
+  $('#cart-overlay').hidden=false;
+  requestAnimationFrame(() => { $('#cart-overlay').classList.add('open'); $('#cart-drawer').classList.add('open'); });
+  $('#cart-drawer').setAttribute('aria-hidden','false'); $('#cart-close').focus();
+}
+function closeCart() {
+  $('#cart-overlay').classList.remove('open'); $('#cart-drawer').classList.remove('open'); $('#cart-drawer').setAttribute('aria-hidden','true');
+  setTimeout(() => { if(!$('#cart-drawer').classList.contains('open')) $('#cart-overlay').hidden=true; },450);
+  $('#cart-btn').focus();
+}
+function closeCheckout() { $('#checkout-modal').hidden=true; $('#cart-btn').focus(); }
+
+/* ════════════════════════════════════════════════════════════
+   SECTION 4 — INTERACTIONS, LANGUAGE AND MOTION
+   ════════════════════════════════════════════════════════════ */
+function applyLanguage() {
+  document.documentElement.lang=state.lang; document.documentElement.dir=state.lang==='ar'?'rtl':'ltr';
+  document.title=t('meta.title');
+  $$('[data-i18n]').forEach(node => { const value=t(node.dataset.i18n); if(value) node.textContent=value; });
+  $$('[data-i18n-ph]').forEach(node => node.placeholder=t(node.dataset.i18nPh));
+  $$('[data-i18n-aria]').forEach(node => node.setAttribute('aria-label',t(node.dataset.i18nAria)));
+  $('#lang-btn').textContent=state.lang.toUpperCase();
+  renderCatalog(); renderCart();
+  const quote=TESTIMONIALS[testimonialIndex]; if(quote) showTestimonial(testimonialIndex);
+  renderBoutiques();
+}
+function scrollToTarget(target) {
+  const node=document.querySelector(target); if(!node) return;
+  const start=window.scrollY, end=start+node.getBoundingClientRect().top, distance=end-start;
+  const duration=REDUCED?1:Math.min(1050,Math.max(450,Math.abs(distance)*.55));
+  const started=performance.now();
+  function step(now) { const progress=Math.min(1,(now-started)/duration); const eased=1-Math.pow(1-progress,4); window.scrollTo(0,start+distance*eased); if(progress<1) requestAnimationFrame(step); }
+  requestAnimationFrame(step);
+}
+function createStoryTimeline() {
+  if(!watchParts || !window.gsap || !window.ScrollTrigger) return;
+  if(storyTimeline) { storyTimeline.scrollTrigger?.kill(); storyTimeline.kill(); }
+  storyTimeline=gsap.timeline({scrollTrigger:{trigger:'#story',start:'top top',end:'bottom bottom',scrub:1}});
+  storyTimeline.to(watchParts.movement.position,{z:-.72,duration:.25},.2).to(watchParts.dial.position,{z:.34,duration:.25},.28).to(watchParts.bezel.position,{z:.44,duration:.25},.34).to(watchParts.bracelet.position,{z:-.42,duration:.25},.38).to(watchParts.caseGroup.position,{z:.24,duration:.25},.4).to(watchParts.movement.position,{z:-.17,duration:.25},.7).to(watchParts.dial.position,{z:.18,duration:.25},.74).to(watchParts.bezel.position,{z:.14,duration:.25},.78).to(watchParts.bracelet.position,{z:-.075,duration:.25},.82).to(watchParts.caseGroup.position,{z:0,duration:.25},.84);
+}
+function initMotion() {
+  if(!REDUCED && window.gsap && window.ScrollTrigger) {
+    gsap.registerPlugin(ScrollTrigger);
+    gsap.from('.hero-kicker',{y:20,opacity:0,duration:.9,delay:.15,ease:'power3.out'});
+    gsap.from('.hero-title .line',{yPercent:110,opacity:0,duration:1.2,stagger:.12,delay:.25,ease:'power4.out'});
+    gsap.from('.hero-ui > *',{y:24,opacity:0,duration:.9,stagger:.12,delay:.6,ease:'power3.out'});
+    $$('.section-title,.kicker,.lead,.craft-pars p,.boutique,.card').forEach(node => gsap.from(node,{y:24,opacity:0,duration:.85,ease:'power3.out',scrollTrigger:{trigger:node,start:'top 88%',once:true}}));
+    createStoryTimeline();
+    $$('.callout').forEach((node,index) => gsap.to(node,{autoAlpha:1,y:0,duration:.4,scrollTrigger:{trigger:'#story',start:`top+=${index*12}% top`,end:`top+=${index*12+18}% top`,scrub:true}}));
+    $$('.counter .num').forEach(node => ScrollTrigger.create({trigger:node,start:'top 85%',once:true,onEnter:() => {
+      const target=Number(node.dataset.count); const counter={value:0};
+      gsap.to(counter,{value:target,duration:1.8,ease:'power2.out',onUpdate:() => node.textContent=Math.round(counter.value).toLocaleString('en-US')});
+    }}));
+  } else {
+    $$('.callout').forEach(node => { node.style.opacity='1'; node.style.visibility='visible'; node.style.transform='none'; });
+    $$('.counter .num').forEach(node => node.textContent=Number(node.dataset.count).toLocaleString('en-US'));
+  }
+}
+const TESTIMONIALS=[
+  {en:['“The Datejust is the one object I own that makes every other thing feel temporary.”','Alexandre M. · Geneva'],ar:['«ساعة ديت جست هي الشيء الوحيد الذي أملكه ويجعل كل شيء آخر يبدو مؤقتاً.»','ألكسندر م. · جنيف']},
+  {en:['“The care in the fitting was every bit as memorable as the watch itself.”','Nadia R. · Dubai'],ar:['«كانت العناية في ضبط المقاس لا تقل تميزاً عن الساعة نفسها.»','نادية ر. · دبي']},
+  {en:['“A quiet, exacting experience from the first appointment to the final detail.”','Thomas L. · London'],ar:['«تجربة هادئة ومتقنة من الموعد الأول حتى أدق التفاصيل.»','توماس ل. · لندن']}
+];
+let testimonialIndex=0;
+function showTestimonial(index) {
+  testimonialIndex=index; const quote=TESTIMONIALS[index];
+  $('#t-text').textContent=quote[state.lang][0]; $('#t-name').textContent=quote[state.lang][1];
+  $('#t-dots').querySelectorAll('button').forEach((button,i) => { button.classList.toggle('active',i===index); button.setAttribute('aria-selected',String(i===index)); });
+}
+const BOUTIQUES=[
+  {city:'Geneva',address:'Rue du Rhône 28, 1204 Geneva',phone:'+41 22 555 01 05',arCity:'جنيف',arAddress:'شارع الرون 28، 1204 جنيف'},
+  {city:'Dubai',address:'The Dubai Mall, Fashion Avenue',phone:'+971 4 555 01 05',arCity:'دبي',arAddress:'دبي مول، شارع الأزياء'},
+  {city:'Cairo',address:'Four Seasons Nile Plaza, Garden City',phone:'+20 2 2575 0001',arCity:'القاهرة',arAddress:'فور سيزونز نايل بلازا، جاردن سيتي'}
+];
+function renderBoutiques() {
+  $('#boutiques').innerHTML=BOUTIQUES.map(place => `<article class="boutique"><h3>${state.lang==='ar'?place.arCity:place.city}</h3><p class="b-addr">${state.lang==='ar'?place.arAddress:place.address}</p><div class="b-meta"><span>${t('bout.hours')} 10:00 — 22:00</span><a href="tel:${place.phone.replace(/[^+\d]/g,'')}">${t('bout.call')} ↗</a></div></article>`).join('');
+}
+function initEvents() {
+  $('#cards').addEventListener('click',event => {
+    const add=event.target.closest('[data-add]');
+    if(add) { event.stopPropagation(); const id=add.dataset.add; addToCart(id,WATCHES[id].price,'Standard'); return; }
+    const card=event.target.closest('[data-model]'); if(card) chooseModel(card.dataset.model);
+  });
+  $('#cards').addEventListener('keydown',event => { if((event.key==='Enter'||event.key===' ')&&event.target.matches('.card')) { event.preventDefault(); chooseModel(event.target.dataset.model); } });
+  $('#cfg-model').addEventListener('click',event => { const button=event.target.closest('[data-model]'); if(button) chooseModel(button.dataset.model); });
+  $('#cfg-dial').addEventListener('click',event => { const button=event.target.closest('[data-dial]'); if(button){state.dial=button.dataset.dial;renderOptions();applyConfig('dial');} });
+  $('#cfg-bezel').addEventListener('click',event => { const button=event.target.closest('[data-bezel]'); if(button){state.bezel=button.dataset.bezel;renderOptions();applyConfig('bezel');} });
+  $('#cfg-bracelet').addEventListener('click',event => { const button=event.target.closest('[data-bracelet]'); if(button){state.bracelet=button.dataset.bracelet;renderOptions();applyConfig('bracelet');} });
+  $('#ro-add').addEventListener('click',() => addToCart(state.model,WATCHES[state.model].price,'Standard'));
+  $('#cfg-add').addEventListener('click',() => addToCart(state.model,configuredPrice(),`Dial: ${state.dial}, Bezel: ${state.bezel}, Bracelet: ${state.bracelet}`));
+  $('#currency').addEventListener('change',event => { state.currency=event.target.value; renderCatalog();renderCart();renderOptions(); savePrefs(); });
+  $('#lang-btn').addEventListener('click',() => { state.lang=state.lang==='en'?'ar':'en';applyLanguage(); savePrefs(); });
+  $('#theme-btn').addEventListener('click',() => { state.theme=state.theme==='dark'?'light':'dark';document.documentElement.dataset.theme=state.theme; if (renderer) renderer.toneMappingExposure = state.theme === 'light' ? 1.0 : 1.18; savePrefs(); });
+  $('#cart-btn').addEventListener('click',openCart); $('#cart-close').addEventListener('click',closeCart); $('#cart-overlay').addEventListener('click',closeCart);
+  $('#cart-items').addEventListener('click',event => {
+    const remove=event.target.closest('[data-remove]'); const quantity=event.target.closest('[data-qty]');
+    if(remove) cart=cart.filter(item => item.key!==remove.dataset.remove);
+    if(quantity) { const item=cart.find(entry => entry.key===quantity.dataset.key); if(item){item.qty+=Number(quantity.dataset.qty);if(item.qty<1)cart=cart.filter(entry=>entry!==item);} }
+    saveCart();renderCart();
+    if(remove || (quantity && !cart.some(entry => entry.key===quantity.dataset.key))) $('#cart-close').focus(); /* a11y: restore focus after deletion */
+  });
+  $('#checkout-btn').addEventListener('click',() => { if(!cart.length)return;closeCart();$('#checkout-modal').hidden=false;$('#co-form').hidden=false;$('#co-success').hidden=true;$$('#co-form input').forEach(input => input.value='');$('#co-form input').focus(); });
+  $('#co-close').addEventListener('click',closeCheckout); $('#co-done').addEventListener('click',closeCheckout);
+  $('#checkout-modal').addEventListener('click',event => { if(event.target.id==='checkout-modal')closeCheckout(); });
+  $('#co-form').addEventListener('submit',event => { event.preventDefault(); if(!event.currentTarget.reportValidity())return; $('#co-form').hidden=true;$('#co-success').hidden=false;cart=[];saveCart();renderCart();$('#co-done').focus(); });
+  $('#news-form').addEventListener('submit',event => { event.preventDefault(); const input=$('#news-email'); if(input.checkValidity())$('#news-ok').hidden=false;else input.reportValidity(); });
+  $('#t-dots').addEventListener('click',event => { const button=event.target.closest('[data-index]'); if(button)showTestimonial(Number(button.dataset.index)); });
+  $('#t-dots').innerHTML=TESTIMONIALS.map((_,index) => `<button type="button" data-index="${index}" role="tab" aria-label="Testimonial ${index+1}" aria-selected="${index===0}"></button>`).join('');
+  $('#t-dots').addEventListener('keydown',event => { /* a11y: arrow-key navigation, direction-aware for RTL */
+    const total=TESTIMONIALS.length; const step=state.lang==='ar'?-1:1;
+    let index=testimonialIndex;
+    if(event.key==='ArrowRight') index=(index+step+total)%total;
+    else if(event.key==='ArrowLeft') index=(index-step+total)%total;
+    else if(event.key==='Home') index=0; else if(event.key==='End') index=total-1; else return;
+    event.preventDefault(); showTestimonial(index); $('#t-dots').children[index].focus();
+  });
+  $('#burger').addEventListener('click',() => { const open=$('#nav').classList.toggle('nav-open');$('#burger').setAttribute('aria-expanded',String(open)); });
+  document.addEventListener('click',event => { const link=event.target.closest('[data-scroll]'); if(link){const href=link.getAttribute('href');if(href&&href.startsWith('#')){event.preventDefault();scrollToTarget(href);$('#nav').classList.remove('nav-open');$('#burger').setAttribute('aria-expanded','false');}} });
+  window.addEventListener('scroll',() => $('#nav').classList.toggle('scrolled',scrollY>30),{passive:true});
+  $('#currency').value=state.currency;
+  document.addEventListener('keydown',event => {
+    if(event.key==='Escape') { if(!$('#checkout-modal').hidden)closeCheckout();else if($('#cart-drawer').classList.contains('open'))closeCart(); }
+    if(event.key==='Tab'&&!$('#checkout-modal').hidden) {
+      const focusable=$$('#checkout-modal button,#checkout-modal input').filter(node=>!node.disabled);
+      const first=focusable[0],last=focusable[focusable.length-1];
+      if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus();}
+      else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}
+    }
+  });
+  const cursor=$('#cursor');
+  if(!IS_TOUCH) {
+    document.body.classList.add('has-cursor');
+    document.addEventListener('pointermove',event => { pointer.x=event.clientX;pointer.y=event.clientY;mouse.x=(event.clientX/innerWidth-.5)*2;mouse.y=(event.clientY/innerHeight-.5)*2;cursor.style.transform=`translate(${event.clientX}px,${event.clientY}px)`; });
+    $$('a,button,.card').forEach(node => { node.addEventListener('pointerenter',() => cursor.classList.add('hover'));node.addEventListener('pointerleave',() => cursor.classList.remove('hover')); });
+    $$('.magnetic').forEach(node => {
+      node.addEventListener('pointermove',event => { const rect=node.getBoundingClientRect();node.style.transform=`translate(${(event.clientX-rect.left-rect.width/2)*.08}px,${(event.clientY-rect.top-rect.height/2)*.12}px)`; });
+      node.addEventListener('pointerleave',() => node.style.transform='');
+    });
+  }
+  /* Zoom / drag are gated to the "stage" zones only (hero, story, and the
+     3D stage columns) so normal page scrolling no longer resizes the watch. */
+  const isStageZone = target => !!(target && target.closest && target.closest('#hero,#story,.stage-col'));
+  window.addEventListener('pointerdown',event => {
+    if(event.target.closest('a,button,input,select,textarea'))return;
+    if(!isStageZone(event.target))return;
+    pointerDown=true;pointerStart={x:event.clientX,y:event.clientY,rx:watchRoot?watchRoot.rotation.x:0,ry:watchRoot?watchRoot.rotation.y:0};
+  });
+  window.addEventListener('pointermove',event => {
+    if(!pointerDown||!watchRoot)return;
+    watchRoot.rotation.y=pointerStart.ry+(event.clientX-pointerStart.x)*.006;
+    watchRoot.rotation.x=Math.max(-.8,Math.min(.8,pointerStart.rx+(event.clientY-pointerStart.y)*.006));
+  });
+  window.addEventListener('pointerup',() => { pointerDown=false; });
+  window.addEventListener('pointercancel',() => { pointerDown=false; });
+  window.addEventListener('wheel',event => { if(!isStageZone(event.target))return; userZoom=Math.max(.78,Math.min(1.24,userZoom-Math.sign(event.deltaY)*.025)); },{passive:true});
+  window.addEventListener('touchstart',event => {
+    if(event.touches.length===2){ pinchStage=isStageZone(event.target); touchPinchDistance=Math.hypot(event.touches[0].clientX-event.touches[1].clientX,event.touches[0].clientY-event.touches[1].clientY); }
+  },{passive:true});
+  window.addEventListener('touchmove',event => {
+    if(event.touches.length!==2 || !pinchStage)return;
+    event.preventDefault();
+    const distance=Math.hypot(event.touches[0].clientX-event.touches[1].clientX,event.touches[0].clientY-event.touches[1].clientY);
+    userZoom=Math.max(.78,Math.min(1.24,userZoom+(distance-touchPinchDistance)*.003));
+    touchPinchDistance=distance;
+  },{passive:false});
+}
+function startPreloader() {
+  const number=$('#pre-num'), ring=$('#pre-ring-fg');
+  const finish=() => { if(number) number.textContent='100'; if(ring) ring.style.strokeDashoffset='0'; $('#preloader').classList.add('done'); clearTimeout(preloaderFailsafe); };
+  const preloaderFailsafe=setTimeout(finish,3500); /* belt & braces: preloader ALWAYS completes, even if rAF is throttled (background tab) */
+  if(REDUCED){finish();return;}
+  const started=performance.now(), duration=1150;
+  function tick(now) { const progress=Math.min(1,(now-started)/duration);const value=Math.round(progress*100);number.textContent=value;ring.style.strokeDashoffset=String(326.7*(1-progress));if(progress<1)requestAnimationFrame(tick);else {clearTimeout(preloaderFailsafe);setTimeout(finish,180);} }
+  requestAnimationFrame(tick);
+}
+function init() {
+  loadPrefs();                                   /* restore language / theme / currency before first render */
+  renderCatalog(); renderBoutiques(); loadCart();renderCart();showTestimonial(0);initThree();initEvents();initMotion();applyLanguage();
+  startPreloader();
+  refreshRates();                                /* live FX, cached, with safe fallback */
+}
+
+/* ── BOOT (crash-proof): the site must never show a dead preloader,
+   even if the 3D library or any startup step fails. ─────────────────── */
+try {
+  init();
+} catch (error) {
+  console.error('Startup failed; revealing page without 3D.', error);
+  document.body.classList.add('no-webgl');
+  const pre = $('#preloader'); if (pre) pre.classList.add('done');
+}
+/* Rescue path: if the local 3D library file was missing at script time
+   (e.g. index.html copied without the vendor folder), retry from the CDN
+   once the page has loaded — without ever blocking the rest of the site. */
+if (typeof THREE === 'undefined') {
+  window.addEventListener('load', () => setTimeout(() => {
+    if (webglReady) return;
+    const cdn = document.createElement('script');
+    cdn.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/0.149.0/three.min.js';
+    cdn.onload = () => { if (!webglReady) { document.body.classList.remove('no-webgl'); initThree(); } };
+    document.head.appendChild(cdn);
+  }, 400));
+}
+</script>
+</body>
+</html>

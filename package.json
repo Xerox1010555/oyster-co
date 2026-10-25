@@ -1,0 +1,33 @@
+{
+  "name": "oyster-co",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "setup": "prisma db push && node prisma/seed.mjs",
+    "db:push": "prisma db push",
+    "db:studio": "prisma studio",
+    "seed": "node prisma/seed.mjs"
+  },
+  "prisma": {
+    "seed": "node prisma/seed.mjs"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.6.0",
+    "gsap": "3.12.5",
+    "next": "^15.3.2",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "stripe": "^17.7.0",
+    "three": "0.149.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.0",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "prisma": "^6.6.0",
+    "typescript": "^5.8.3"
+  }
+}
