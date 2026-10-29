@@ -17,3 +17,6 @@ prisma/dev.db
 .DS_Store
 Thumbs.db
 next-env.d.ts
+
+.vercel
+.env*
